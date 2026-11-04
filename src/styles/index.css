@@ -2,6 +2,7 @@
 @import './design-system.css';
 @import '../components/app-shell/app-shell.css';
 @import '../components/button/button.css';
+@import '../components/daily-quote/daily-quote.css';
 @import '../components/icon/icon.css';
 @import '../components/search-field/search-field.css';
 @import '../pages/home-page/home-page.css';
