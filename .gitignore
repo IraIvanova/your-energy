@@ -1,0 +1,17 @@
+node_modules
+dist
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Local development tools
+/.agents/
+/.claude/
+/.codex/
+/.cursor/
+/AGENTS.md
+/CLAUDE.md
+/GEMINI.md
+/.mcp.json
+/.github/copilot-instructions.md

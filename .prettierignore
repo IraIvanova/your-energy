@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+package-lock.json
+src/images/icons/
+public/favicon.svg
+*.zip
+.husky/_

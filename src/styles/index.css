@@ -1,0 +1,50 @@
+@import './tokens.css';
+@import './design-system.css';
+@import '../components/app-shell/app-shell.css';
+@import '../components/button/button.css';
+@import '../components/icon/icon.css';
+@import '../components/search-field/search-field.css';
+@import '../pages/home-page/home-page.css';
+@import '../pages/favorites-page/favorites-page.css';
+:root {
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  color: var(--color-ink);
+  background: var(--color-canvas);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+  font-variation-settings: 'opsz' 14;
+  line-height: var(--line-height-body);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}

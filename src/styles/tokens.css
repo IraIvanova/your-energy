@@ -1,0 +1,98 @@
+:root {
+  --font-family: 'DM Sans', sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-body: 16px;
+  --font-size-lead: 18px;
+  --line-height-xs: 18px;
+  --line-height-sm: 20px;
+  --line-height-body: 24px;
+  --letter-spacing-heading: -0.02em;
+
+  --color-ink: #242424;
+  --color-canvas: #f4f4f4;
+  --color-surface: #fff;
+  --color-muted: rgb(36 36 36 / 60%);
+  --color-subtle: rgb(36 36 36 / 40%);
+  --color-border: rgb(36 36 36 / 10%);
+  --color-rating: #eea10c;
+  --color-pagination-muted: #d4d4d4;
+  --color-inverse-muted: rgb(244 244 244 / 60%);
+  --color-inverse-subtle: rgb(244 244 244 / 40%);
+  --color-inverse-border: rgb(244 244 244 / 10%);
+  --color-overlay: rgb(4 4 4 / 40%);
+  --color-image-scrim: rgb(17 17 17 / 50%);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  --radius-card: 12px;
+  --radius-surface: 20px;
+  --radius-social: 10px;
+  --radius-pill: 30px;
+  --radius-hero: 30px;
+  --border-width: 1px;
+  --container-max: 1440px;
+  --page-gutter: 20px;
+  --section-gap: 80px;
+  --grid-gap: 20px;
+  --surface-padding: 20px;
+  --control-height: 42px;
+  --hero-font-size: 38px;
+  --hero-line-height: 44px;
+  --section-font-size: 28px;
+  --section-line-height: 38px;
+  --card-font-size: 20px;
+  --card-line-height: 20px;
+  --footer-font-size: 40px;
+  --footer-line-height: 44px;
+  --hero-height: 460px;
+  --motion-duration: 160ms;
+  --motion-easing: ease;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --page-gutter: 32px;
+    --grid-gap: 32px;
+    --surface-padding: 40px;
+    --control-height: 48px;
+    --radius-hero: 60px;
+    --hero-font-size: 74px;
+    --hero-line-height: 74px;
+    --section-font-size: 44px;
+    --section-line-height: 48px;
+    --card-font-size: 24px;
+    --card-line-height: 32px;
+    --footer-font-size: 56px;
+    --footer-line-height: 60px;
+    --hero-height: 550px;
+  }
+}
+
+@media (min-width: 1200px) {
+  :root {
+    --section-gap: 150px;
+    --section-font-size: 44px;
+    --section-line-height: 48px;
+    --hero-height: 350px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration: 0ms;
+  }
+}

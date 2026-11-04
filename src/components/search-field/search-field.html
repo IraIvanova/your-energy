@@ -1,0 +1,28 @@
+<div class="ui-search" data-search>
+  <label class="visually-hidden" for="{=$id}">{=$label}</label>
+  <input
+    class="ui-input ui-search__input"
+    type="search"
+    id="{=$id}"
+    placeholder="{=$placeholder}"
+    data-search-input
+  />
+  <button
+    class="ui-search__clear"
+    type="button"
+    aria-label="Clear {=$label}"
+    data-search-clear
+    hidden
+  >
+    <load
+      src="components/icon/icon.html"
+      src-url="./images/icons/clear-search.svg"
+      label=""
+    />
+  </button>
+  <load
+    src="components/icon/icon.html"
+    src-url="./images/icons/search.svg"
+    label=""
+  />
+</div>
