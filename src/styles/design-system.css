@@ -1,0 +1,60 @@
+.ui-theme {
+  --ui-foreground: var(--color-ink);
+  --ui-background: var(--color-surface);
+  --ui-muted: var(--color-muted);
+  --ui-border: var(--color-border);
+  --ui-button-fill: var(--color-ink);
+  --ui-button-text: var(--color-canvas);
+
+  color: var(--ui-foreground);
+  background: var(--ui-background);
+}
+
+.ui-theme--dark {
+  --ui-foreground: var(--color-canvas);
+  --ui-background: var(--color-ink);
+  --ui-muted: var(--color-inverse-muted);
+  --ui-border: var(--color-inverse-border);
+  --ui-button-fill: var(--color-canvas);
+  --ui-button-text: var(--color-ink);
+}
+
+.ui-surface {
+  padding: var(--surface-padding);
+  border-radius: var(--radius-surface);
+}
+
+.ui-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  border: var(--border-width) solid currentColor;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+}
+
+.ui-heading {
+  margin: 0;
+  font-size: var(--section-font-size);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-heading);
+  line-height: var(--section-line-height);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .ui-tag {
+    padding-inline: var(--space-4);
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+}

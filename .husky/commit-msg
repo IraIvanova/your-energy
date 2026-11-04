@@ -1,0 +1,4 @@
+if ! npx --no-install commitlint --edit "$1"; then
+  printf '\nYour Energy coach: this commit skipped name day!\nTry: feat(header): add mobile menu\n\n'
+  exit 1
+fi

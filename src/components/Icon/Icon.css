@@ -1,0 +1,12 @@
+.ui-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.ui-icon img {
+  display: block;
+  max-width: none;
+}

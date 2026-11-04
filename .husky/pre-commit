@@ -1,0 +1,2 @@
+printf '\nYour Energy coach: time for a quick code warm-up. No spaghetti on the treadmill!\n\n'
+npx --no-install lint-staged
