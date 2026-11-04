@@ -10,9 +10,12 @@ export function initDailyQuotes(): void {
   initialized = true;
   let loading = false;
   let displayedDay: string | undefined;
+  let failedDay: string | undefined;
 
-  async function updateQuotes(): Promise<void> {
-    if (loading || displayedDay === new Date().toDateString()) return;
+  async function updateQuotes(retry = false): Promise<void> {
+    const day = new Date().toDateString();
+    if (loading || displayedDay === day || (!retry && failedDay === day))
+      return;
     loading = true;
     const focusedRetry = document.activeElement?.closest('[data-quote-retry]');
     for (const card of cards) {
@@ -20,6 +23,7 @@ export function initDailyQuotes(): void {
       card.querySelector<HTMLElement>('[data-quote-content]')!.hidden = true;
       const status = card.querySelector<HTMLElement>('[data-quote-status]')!;
       status.hidden = false;
+      status.classList.remove('visually-hidden');
       status.textContent = 'Loading quote…';
       card.querySelector<HTMLButtonElement>('[data-quote-retry]')!.hidden =
         true;
@@ -28,6 +32,7 @@ export function initDailyQuotes(): void {
     try {
       const quote = await dailyQuoteService.getQuote();
       displayedDay = new Date().toDateString();
+      failedDay = undefined;
       for (const card of cards) {
         card.querySelector<HTMLElement>('[data-quote-text]')!.textContent =
           quote.quote;
@@ -35,8 +40,8 @@ export function initDailyQuotes(): void {
           quote.author;
         card.querySelector<HTMLElement>('[data-quote-content]')!.hidden = false;
         const status = card.querySelector<HTMLElement>('[data-quote-status]')!;
-        status.textContent = 'Quote loaded.';
-        status.hidden = true;
+        status.textContent = `${quote.quote} — ${quote.author}`;
+        status.classList.add('visually-hidden');
       }
       const restoreFocus =
         document.activeElement === document.body ||
@@ -47,6 +52,7 @@ export function initDailyQuotes(): void {
           ?.querySelector<HTMLElement>('h2')
           ?.focus({ preventScroll: true });
     } catch {
+      failedDay = new Date().toDateString();
       for (const card of cards) {
         card.querySelector<HTMLElement>('[data-quote-status]')!.textContent =
           'Couldn’t load the quote. Please try again.';
@@ -68,7 +74,7 @@ export function initDailyQuotes(): void {
   for (const card of cards) {
     card
       .querySelector('[data-quote-retry]')!
-      .addEventListener('click', () => void updateQuotes());
+      .addEventListener('click', () => void updateQuotes(true));
   }
   window.addEventListener('hashchange', () => void updateQuotes());
   window.addEventListener('focus', () => void updateQuotes());
