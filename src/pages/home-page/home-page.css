@@ -27,3 +27,7 @@
     font-size: var(--font-size-lead);
   }
 }
+
+.home-page__quote {
+  margin-top: var(--space-8);
+}
