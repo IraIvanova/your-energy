@@ -39,13 +39,13 @@ src/
   index.html              HTML entry point with build-time includes
   main.ts                 Fonts and behavior initialization
   components/
-    AppShell/             AppShell.ts, AppShell.html, AppShell.css
-    Button/               Button.ts, Button.html, Button.css
-    Icon/                 Icon.ts, Icon.html, Icon.css
-    SearchField/          SearchField.ts, SearchField.html, SearchField.css
+    app-shell/            Header and page navigation
+    button/               Shared button markup and styles
+    icon/                 Shared icon markup and styles
+    search-field/         Search input and clear-button behavior
   pages/
-    FavoritesPage/        FavoritesPage.ts, FavoritesPage.html, FavoritesPage.css
-    HomePage/             HomePage.ts, HomePage.html, HomePage.css
+    favorites-page/       Favorites page markup, styles, and behavior
+    home-page/            Home page markup, styles, and behavior
   images/                 Named image/icon exports and source files
   services/api.ts         fetchJson and ApiError
   styles/
@@ -60,9 +60,9 @@ partials using paths relative to `src` (without a leading `./`), including
 inside other partials:
 
 ```html
-<load src="pages/HomePage/HomePage.html" />
+<load src="pages/home-page/home-page.html" />
 <load
-  src="components/Button/Button.html"
+  src="components/button/button.html"
   type="submit"
   variant="solid"
   label="Search"
@@ -70,9 +70,9 @@ inside other partials:
 ```
 
 The include plugin expands these tags before the browser receives the HTML.
-Static arguments in partials use `{=$label}` syntax. For `Icon`, provide
+Static arguments in partials use `{=$label}` syntax. For `icon`, provide
 `src-url` and `label` (use an empty label for decorative icons). For
-`SearchField`, provide a unique `id`, `label`, and `placeholder`.
+`search-field`, provide a unique `id`, `label`, and `placeholder`.
 
 Add component/page CSS imports to `src/styles/index.css`. TypeScript should
 attach event listeners to existing markup, not import HTML as strings or build
@@ -127,6 +127,27 @@ files remain in the top-level `public` folder: use `%BASE_URL%` in HTML and
 Clone this repository, install dependencies, and create a branch for your task.
 Open a pull request into `main` when your work is ready. Run `npm run check`
 before you open the pull request. Ask a teammate to review it before merging.
+
+Use lowercase English names for files and folders. Separate words with hyphens,
+as in `home-page.ts`. Use camelCase for variables and functions, PascalCase for
+classes, and UPPER_SNAKE_CASE for fixed shared constants. Tests check file and
+folder names. ESLint rejects `console` calls and `debugger` statements.
+
+## Starter scope
+
+This is the shared project base. Home and Favorites still contain placeholders.
+The team will add the catalog, search, quote, modals, favorites storage, and
+subscription form in separate pull requests.
+
+The base includes responsive styles for mobile, tablet, and desktop,
+`modern-normalize`, DM Sans, a favicon, and static assets in `src/images`. Keep
+HTML, CSS, and TypeScript in separate files.
+
+Before final submission, finish the design and features, optimize images for
+screen size and retina displays, and check loading behavior. Enable GitHub
+Pages, merge the setup, and verify the live site. Validate the completed HTML
+and CSS, reach at least 90 in every PageSpeed category, and get the mentor's
+code review. Remove completed work branches before final submission.
 
 ## Sources
 

@@ -32,8 +32,8 @@ test('shared partials expand static arguments and nested icon includes', async (
   try {
     const html = await server.transformIndexHtml(
       '/index.html',
-      `<load src="components/Button/Button.html" type="submit" variant="outline" label="Search" />
-       <load src="components/SearchField/SearchField.html" id="activities" label="Activities" placeholder="Search activities" />`
+      `<load src="components/button/button.html" type="submit" variant="outline" label="Search" />
+       <load src="components/search-field/search-field.html" id="activities" label="Activities" placeholder="Search activities" />`
     );
     assert.match(html, /ui-button--outline/);
     assert.match(html, /type="submit"/);
