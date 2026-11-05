@@ -1,4 +1,5 @@
 export function initAppShell(): void {
+  const DESKTOP_QUERY = '(min-width: 768px)';
   const pages = document.querySelectorAll<HTMLElement>('[data-page]');
   const links = document.querySelectorAll<HTMLAnchorElement>('[data-route]');
   if (pages.length === 0 || links.length === 0) {
@@ -14,6 +15,13 @@ export function initAppShell(): void {
     '.site-menu__backdrop'
   );
   const menuNav = menu?.querySelector<HTMLElement>('.site-menu__nav');
+
+  function getMenuFocusables(): HTMLElement[] {
+    if (!menu) return [];
+    return Array.from(
+      menu.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')
+    ).filter(element => element.offsetParent !== null);
+  }
 
   function setBackdropVisible(visible: boolean): void {
     if (!backdrop) return;
@@ -54,7 +62,7 @@ export function initAppShell(): void {
     document.addEventListener('keydown', onKeydown);
   }
 
-  function closeMenu(): void {
+  function closeMenu(options: { restoreFocus?: boolean } = {}): void {
     if (!menu || !toggle) return;
     const wasOpen = toggle.getAttribute('aria-expanded') === 'true';
     menu.hidden = true;
@@ -63,13 +71,28 @@ export function initAppShell(): void {
     document.body.classList.remove('site-menu-open');
     setBackdropVisible(false);
     document.removeEventListener('keydown', onKeydown);
-    if (wasOpen) toggle.focus();
+    if (options.restoreFocus !== false && wasOpen) toggle.focus();
   }
 
   function onKeydown(event: KeyboardEvent): void {
     if (event.key === 'Escape') {
       event.preventDefault();
       closeMenu();
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusables = getMenuFocusables();
+    if (focusables.length === 0) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    const active = document.activeElement;
+    const insideMenu = active instanceof Node && menu?.contains(active);
+    if (event.shiftKey && (!insideMenu || active === first)) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (!insideMenu || active === last)) {
+      event.preventDefault();
+      first.focus();
     }
   }
 
@@ -80,10 +103,17 @@ export function initAppShell(): void {
       openMenu();
     }
   });
-  closeBtn?.addEventListener('click', closeMenu);
-  backdrop?.addEventListener('click', closeMenu);
+  closeBtn?.addEventListener('click', () => closeMenu());
+  backdrop?.addEventListener('click', () => closeMenu());
   menuNav?.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', closeMenu);
+    link.addEventListener('click', () => closeMenu());
+  });
+
+  const desktopMql = window.matchMedia(DESKTOP_QUERY);
+  desktopMql.addEventListener('change', event => {
+    if (event.matches && toggle?.getAttribute('aria-expanded') === 'true') {
+      closeMenu({ restoreFocus: false });
+    }
   });
 
   updateRoute();
