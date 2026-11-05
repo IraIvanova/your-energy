@@ -3,6 +3,7 @@
 @import '../components/app-shell/app-shell.css';
 @import '../components/button/button.css';
 @import '../components/icon/icon.css';
+@import '../components/social-links/social-links.css';
 @import '../components/search-field/search-field.css';
 @import '../pages/home-page/home-page.css';
 @import '../pages/favorites-page/favorites-page.css';
