@@ -1,0 +1,116 @@
+.daily-quote {
+  position: relative;
+  display: flex;
+  min-height: 270px;
+  align-items: flex-end;
+  overflow: hidden;
+  margin-top: var(--section-gap);
+  padding: var(--space-8) var(--surface-padding);
+  border-radius: var(--radius-surface);
+  background: var(--color-ink) url('../../images/photos/quote.jpg') center /
+    cover no-repeat;
+}
+
+.daily-quote::before {
+  position: absolute;
+  inset: 0;
+  background: var(--color-image-scrim);
+  content: '';
+}
+
+.daily-quote__content,
+.daily-quote__icon,
+.daily-quote__error {
+  position: relative;
+  z-index: 1;
+}
+
+.daily-quote__content {
+  max-width: 720px;
+}
+
+.daily-quote__eyebrow {
+  margin: 0 0 var(--space-4);
+  color: var(--color-inverse-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+}
+
+.daily-quote__text {
+  margin: 0;
+  color: var(--color-canvas);
+  font-size: var(--font-size-lead);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.35;
+}
+
+.daily-quote__author {
+  margin: var(--space-4) 0 0;
+  color: var(--color-inverse-muted);
+  font-size: var(--font-size-sm);
+}
+
+.daily-quote__author::before {
+  content: '— ';
+}
+
+.daily-quote__icon {
+  position: absolute;
+  top: var(--surface-padding);
+  right: var(--surface-padding);
+  width: 48px;
+  height: 48px;
+}
+
+.daily-quote__icon--mobile {
+  display: none;
+}
+
+.daily-quote__error {
+  margin: 0;
+  color: var(--color-canvas);
+  font-size: var(--font-size-sm);
+}
+
+@media (min-width: 768px) {
+  .daily-quote {
+    min-height: 360px;
+    padding: var(--space-12) var(--space-10);
+  }
+
+  .daily-quote__text {
+    max-width: 640px;
+    font-size: 28px;
+    line-height: 1.3;
+  }
+
+  .daily-quote__author {
+    font-size: var(--font-size-body);
+  }
+
+  .daily-quote__icon {
+    top: var(--space-10);
+    right: var(--space-10);
+    width: 64px;
+    height: 64px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .daily-quote {
+    min-height: 400px;
+    padding: var(--space-16);
+  }
+
+  .daily-quote__text {
+    max-width: 760px;
+    font-size: 40px;
+  }
+
+  .daily-quote__icon {
+    top: var(--space-16);
+    right: var(--space-16);
+    width: 80px;
+    height: 80px;
+  }
+}

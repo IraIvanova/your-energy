@@ -1,4 +1,8 @@
 .favorites-page {
+  max-width: none;
+}
+
+.favorites-page > :not(.daily-quote) {
   max-width: 680px;
 }
 

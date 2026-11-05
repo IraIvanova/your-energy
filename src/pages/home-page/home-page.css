@@ -1,4 +1,8 @@
 .home-page {
+  max-width: none;
+}
+
+.home-page > :not(.daily-quote) {
   max-width: 680px;
 }
 

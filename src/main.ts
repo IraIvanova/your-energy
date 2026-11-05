@@ -5,8 +5,11 @@ import '@fontsource/dm-sans/latin-500.css';
 import '@fontsource/dm-sans/latin-700.css';
 import { initAppShell } from './components/app-shell/app-shell';
 import { initSearchFields } from './components/search-field/search-field';
+import { initDailyQuotes } from './components/daily-quote/daily-quote';
 import './pages/home-page/home-page';
 import './pages/favorites-page/favorites-page';
 
 initAppShell();
 initSearchFields();
+initDailyQuotes();
+window.addEventListener('hashchange', initDailyQuotes);

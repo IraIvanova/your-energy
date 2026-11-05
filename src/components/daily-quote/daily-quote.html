@@ -1,0 +1,28 @@
+<section
+  class="daily-quote ui-theme--dark"
+  data-daily-quote
+  aria-labelledby="daily-quote-title"
+>
+  <div class="daily-quote__content">
+    <p class="daily-quote__eyebrow" id="daily-quote-title">Quote of the day</p>
+    <blockquote class="daily-quote__text" data-quote-text>
+      Loading your daily inspiration...
+    </blockquote>
+    <p class="daily-quote__author" data-quote-author></p>
+  </div>
+  <img
+    class="daily-quote__icon daily-quote__icon--desktop"
+    src="./images/icons/quote.svg"
+    alt=""
+    aria-hidden="true"
+  />
+  <img
+    class="daily-quote__icon daily-quote__icon--mobile"
+    src="./images/icons/quote-mobile.svg"
+    alt=""
+    aria-hidden="true"
+  />
+  <p class="daily-quote__error" data-quote-error role="status" hidden>
+    Unable to load the quote. Please try again later.
+  </p>
+</section>

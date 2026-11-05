@@ -7,6 +7,14 @@ export default defineConfig({
   publicDir: '../public',
   base: '/your-energy/',
   plugins: [injectHTML(), FullReload(['src/**/*.html'])],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://your-energy.b.goit.study',
+        changeOrigin: true,
+      },
+    },
+  },
   build: {
     outDir: '../dist',
     emptyOutDir: true,
