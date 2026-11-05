@@ -1,12 +1,13 @@
 @import './tokens.css';
 @import './design-system.css';
-@import '../components/AppShell/AppShell.css';
-@import '../components/Button/Button.css';
-@import '../components/Icon/Icon.css';
-@import '../components/SearchField/SearchField.css';
-@import '../pages/HomePage/HomePage.css';
-@import '../pages/FavoritesPage/FavoritesPage.css';
-@import '../components/Footer/Footer.css';
+@import '../components/app-shell/app-shell.css';
+@import '../components/button/button.css';
+@import '../components/icon/icon.css';
+@import '../components/search-field/search-field.css';
+@import '../pages/home-page/home-page.css';
+@import '../pages/favorites-page/favorites-page.css';
+@import '../components/footer/footer.css';
+
 :root {
   font-family: var(--font-family);
   font-size: var(--font-size-body);
@@ -49,5 +50,3 @@ textarea {
   outline: 2px solid currentColor;
   outline-offset: 4px;
 }
-
-@import '../components/Footer/Footer.css';
