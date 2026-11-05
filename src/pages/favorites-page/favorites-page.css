@@ -1,5 +1,5 @@
 .favorites-page {
-  max-width: 704px;
+  max-width: 680px;
 }
 
 .favorites-page .page-intro__eyebrow {
@@ -26,8 +26,4 @@
   .favorites-page .page-intro__description {
     font-size: var(--font-size-lead);
   }
-}
-
-.favorites-page__quote {
-  margin-top: var(--space-8);
 }
