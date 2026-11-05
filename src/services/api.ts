@@ -26,7 +26,7 @@ export async function fetchJson<T>(
   return (await response.json()) as T;
 }
 
-interface FilterExercise {
+export interface FilterExercise {
   filter: string;
   name: string;
   imgUrl: string;
@@ -38,11 +38,11 @@ export interface Pagination {
   totalPages: number;
 }
 
-interface FilterResponse extends Pagination {
+export interface FilterResponse extends Pagination {
   results: FilterExercise[];
 }
 
-interface Exercise {
+export interface Exercise {
   _id: string;
   bodyPart: string;
   equipment: string;
@@ -56,11 +56,12 @@ interface Exercise {
   popularity: number;
 }
 
-interface ExercisesResponse extends Pagination {
+export interface ExercisesResponse extends Pagination {
   results: Exercise[];
 }
 
 export type FilterName = 'Body parts' | 'Muscles' | 'Equipment';
+export type ExerciseFilter = 'muscles' | 'bodypart' | 'equipment';
 
 export const getFiltersOfExercises = async (
   filter: FilterName,
@@ -73,17 +74,11 @@ export const getFiltersOfExercises = async (
     limit: String(limit),
   });
 
-  const response = await fetch(`${BASE_URL}/filters?${query}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  return (await response.json()) as FilterResponse;
+  return fetchJson<FilterResponse>(`${BASE_URL}/filters?${query}`);
 };
 
 export const getExercisesByFilter = async (
-  filter: 'muscles' | 'bodypart' | 'equipment',
+  filter: ExerciseFilter,
   exerciseName: string,
   page: number,
   limit: number,
@@ -96,11 +91,5 @@ export const getExercisesByFilter = async (
     ...(keyword && { keyword }),
   });
 
-  const response = await fetch(`${BASE_URL}/exercises?${query}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  return (await response.json()) as ExercisesResponse;
+  return fetchJson<ExercisesResponse>(`${BASE_URL}/exercises?${query}`);
 };
