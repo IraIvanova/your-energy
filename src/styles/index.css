@@ -5,6 +5,9 @@
 @import '../components/daily-quote/daily-quote.css';
 @import '../components/icon/icon.css';
 @import '../components/search-field/search-field.css';
+@import '../components/catalog-filters/catalog-filters.css';
+@import '../components/category-card/category-card.css';
+@import '../components/category-catalog/category-catalog.css';
 @import '../pages/home-page/home-page.css';
 @import '../pages/favorites-page/favorites-page.css';
 :root {
