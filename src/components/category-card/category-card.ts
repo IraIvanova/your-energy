@@ -6,12 +6,20 @@ export function renderCategoryCard(
   onSelect: (name: string) => void
 ) {
   const fragment = template.content.cloneNode(true) as DocumentFragment;
-  fragment.querySelector('img')!.src = category.imgURL;
-  fragment.querySelector('.category-card__name')!.textContent = category.name;
-  fragment.querySelector('.category-card__filter')!.textContent =
-    category.filter;
-  fragment
-    .querySelector('button')!
-    .addEventListener('click', () => onSelect(category.name));
+  const image = fragment.querySelector('img');
+  const name = fragment.querySelector('.category-card__name');
+  const filter = fragment.querySelector('.category-card__filter');
+  const link = fragment.querySelector('a');
+
+  if (!image || !name || !filter || !link) return;
+
+  image.src = category.imgURL;
+  name.textContent = category.name;
+  filter.textContent = category.filter;
+  link.addEventListener('click', event => {
+    event.preventDefault();
+    onSelect(category.name);
+  });
+
   return fragment;
 }

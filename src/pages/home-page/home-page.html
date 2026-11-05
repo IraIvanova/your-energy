@@ -9,18 +9,17 @@
     A little inspiration can make a big difference. Your activity catalog will
     appear here.
   </p>
-  <div class="home-page__quote">
-    <load
-      src="components/daily-quote/daily-quote.html"
-      variant="home"
-      title-id="home-quote-title"
-    />
+</section>
+
+<section class="home-page__exercises">
+  <div class="home-page__header">
+    <h2>Exercises</h2>
+    <load src="components/catalog-filters/catalog-filters.html" />
   </div>
-  <div>
-    <header class="home-page__header">
-      <h2>Exercises</h2>
-      <load src="components/catalog-filters/catalog-filters.html" />
-    </header>
-    <load src="components/category-catalog/category-catalog.html" />
+  <div class="home-page__categories">
+    <div class="home-page__quote"></div>
+    <div class="home-page__catalog">
+      <load src="components/category-catalog/category-catalog.html" />
+    </div>
   </div>
 </section>

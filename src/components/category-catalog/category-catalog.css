@@ -1,13 +1,18 @@
-.catalog {
-  min-width: 0;
-}
-
 .catalog__grid {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
   padding: 0;
-  margin: 0;
+  margin: 0 auto;
   list-style: none;
+  max-width: 335px;
+}
+
+.catalog__grid li {
+  width: 100%;
+  max-width: 335px;
+  min-width: 0;
 }
 
 .catalog__status {
@@ -18,7 +23,18 @@
 
 @media (min-width: 768px) {
   .catalog__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: 100%;
     gap: 32px 15px;
+  }
+
+  .catalog__grid li {
+    width: calc((100% - 30px) / 3);
+    max-width: none;
+  }
+}
+
+@media (min-width: 1440px) {
+  .home-page__catalog {
+    width: 900px;
   }
 }

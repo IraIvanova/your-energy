@@ -4,16 +4,34 @@
   gap: 20px;
   margin-block: 32px;
 }
+
 .home-page__header h2 {
   margin: 0;
   font-size: var(--section-font-size);
   line-height: var(--section-line-height);
   font-weight: 400;
 }
+
+.home-page__categories {
+  display: flex;
+  flex-direction: column;
+}
+
 @media (min-width: 768px) {
   .home-page__header {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+  }
+}
+
+@media (min-width: 1440px) {
+  .home-page__quote {
+    width: 444px;
+  }
+
+  .home-page__categories {
+    flex-direction: row;
+    justify-content: space-around;
   }
 }

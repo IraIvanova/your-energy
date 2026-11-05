@@ -15,18 +15,18 @@ export type CategoriesResponse = {
 const CATEGORIES_URL = 'https://your-energy.b.goit.study/api/filters';
 
 export function categoriesUrl(state: CatalogState): string {
-  const params = new URLSearchParams();
-  params.set('filter', state.filter);
-  params.set('page', String(state.page));
-  params.set('limit', String(state.limit));
+  const params = new URLSearchParams({
+    filter: state.filter,
+    page: String(state.page),
+    limit: String(state.limit),
+  });
 
-  return CATEGORIES_URL + '?' + params.toString();
+  return `${CATEGORIES_URL}?${params}`;
 }
 
 export function loadCategories(
-  state: CatalogState,
-  signal?: AbortSignal
+  state: CatalogState
 ): Promise<CategoriesResponse> {
   const url = categoriesUrl(state);
-  return fetchJson<CategoriesResponse>(url, { signal });
+  return fetchJson<CategoriesResponse>(url);
 }
