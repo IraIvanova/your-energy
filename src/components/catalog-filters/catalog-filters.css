@@ -1,0 +1,35 @@
+.catalog-filters {
+  display: flex;
+  gap: 20px;
+}
+
+.catalog-filters button {
+  position: relative;
+  padding: 0 0 8px;
+  border: 0;
+  color: var(--color-muted);
+  background: transparent;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.catalog-filters button[aria-pressed='true'] {
+  color: var(--color-ink);
+}
+
+.catalog-filters button[aria-pressed='true']::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  border-radius: 2px;
+  background: currentColor;
+  content: '';
+}
+
+@media (min-width: 768px) {
+  .catalog-filters button {
+    font-size: 16px;
+  }
+}

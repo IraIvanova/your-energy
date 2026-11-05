@@ -1,0 +1,14 @@
+<div
+  class="catalog"
+  aria-label="Exercise categories"
+  aria-busy="true"
+  data-category-catalog
+>
+  <p class="catalog__status" role="status" data-catalog-status>
+    Loading categories…
+  </p>
+  <button type="button" data-catalog-retry hidden>Try again</button>
+  <ul class="catalog__grid" data-catalog-list></ul>
+  <div data-catalog-pagination></div>
+</div>
+<load src="components/category-card/category-card.html" />
