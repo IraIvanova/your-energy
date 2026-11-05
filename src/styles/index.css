@@ -4,6 +4,8 @@
 @import '../components/button/button.css';
 @import '../components/icon/icon.css';
 @import '../components/search-field/search-field.css';
+@import '../components/hero/hero.css';
+@import '../components/daily-norm/daily-norm.css';
 @import '../pages/home-page/home-page.css';
 @import '../pages/favorites-page/favorites-page.css';
 :root {
