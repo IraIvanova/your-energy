@@ -1,12 +1,79 @@
-<section
-  class="page-intro home-page"
-  aria-labelledby="home-title"
-  data-page="/"
->
-  <p class="page-intro__eyebrow">Move your way</p>
-  <h1 class="page-intro__title" id="home-title">Find your next activity.</h1>
-  <p class="page-intro__description">
-    A little inspiration can make a big difference. Your activity catalog will
-    appear here.
-  </p>
-</section>
+<div class="page-intro home-page" data-page="/">
+  <section class="home-page__intro-section" aria-labelledby="home-title">
+    <p class="page-intro__eyebrow">Move your way</p>
+    <h1 class="page-intro__title" id="home-title">Find your next activity.</h1>
+    <p class="page-intro__description">
+      A little inspiration can make a big difference. Your activity catalog will
+      appear here.
+    </p>
+  </section>
+
+  <section
+    class="home-page__exercises-section"
+    aria-labelledby="exercises-title"
+  >
+    <div class="home-page__catalog-header">
+      <div class="home-page__catalog-heading">
+        <h2
+          class="home-page__catalog-title visually-hidden"
+          id="exercises-title"
+          data-exercises-title
+        >
+          Exercises
+        </h2>
+        <load src="components/breadcrumbs/breadcrumbs.html" />
+      </div>
+      <form class="home-page__search" data-home-search hidden>
+        <load
+          src="components/search-field/search-field.html"
+          id="exercise-search"
+          label="Search exercises"
+          placeholder="Search"
+        />
+      </form>
+      <nav
+        class="home-page__filter-nav"
+        aria-label="Exercise filters"
+        data-home-filter-nav
+      >
+        <button type="button" data-filter-type="Muscles">Muscles</button>
+        <button type="button" data-filter-type="Body parts">Body parts</button>
+        <button type="button" data-filter-type="Equipment">Equipment</button>
+      </nav>
+    </div>
+    <div class="home-page__exercises-layout">
+      <aside class="home-page__quote-slot" aria-hidden="true"></aside>
+      <div class="home-page__catalog">
+        <p class="home-page__error" data-home-error hidden>
+          We couldn't load categories. Please try again later.
+        </p>
+        <div class="home-page__categories" data-home-categories></div>
+        <div class="home-page__exercises" data-home-exercises hidden>
+          <h2 class="ui-heading visually-hidden" data-home-category-title></h2>
+          <p class="home-page__empty" data-home-empty hidden>
+            No exercises found. Try another search.
+          </p>
+          <div class="exercise-grid home-page__list" data-home-list></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <template data-category-template>
+    <a class="home-page__category" href="#">
+      <span class="home-page__category-name"></span>
+    </a>
+  </template>
+  <template data-home-template>
+    <load
+      src="components/exercise-card/exercise-card.html"
+      id=""
+      title=""
+      rating=""
+      body-part=""
+      target=""
+      equipment=""
+      burned-calories=""
+    />
+  </template>
+</div>

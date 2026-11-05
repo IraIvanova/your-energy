@@ -1,4 +1,8 @@
 .home-page {
+  width: 100%;
+}
+
+.home-page__intro-section {
   max-width: 680px;
 }
 
@@ -22,8 +26,137 @@
   color: var(--color-muted);
 }
 
+.home-page__catalog {
+  min-width: 0;
+}
+
+.home-page__exercises-section {
+  width: 100%;
+  max-width: none;
+  margin-top: var(--space-20);
+}
+
+.home-page__exercises-layout {
+  display: grid;
+  gap: var(--space-10);
+}
+
+.home-page__quote-slot {
+  min-height: 260px;
+}
+
+.home-page__catalog-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-6);
+  width: 100%;
+  margin-bottom: var(--space-8);
+}
+
+.home-page__catalog-heading {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.home-page__catalog-heading .breadcrumbs {
+  margin: 0;
+}
+
+.home-page__catalog-title {
+  margin: 0;
+  font-size: var(--section-font-size);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--section-line-height);
+}
+
+.home-page__list {
+  max-width: none;
+  margin-top: var(--space-10);
+}
+
+.home-page__error {
+  margin-top: var(--space-6);
+  color: var(--color-muted);
+}
+
+.home-page__categories {
+  margin-top: 0;
+}
+
+.home-page__category {
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+.home-page__exercises {
+  margin-top: var(--space-4);
+}
+
+.home-page__exercises .ui-heading {
+  margin-block: var(--space-8) var(--space-5);
+  text-transform: capitalize;
+}
+
+.home-page__search {
+  max-width: 320px;
+}
+
+.home-page__filter-nav {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+}
+
+.home-page__filter-nav button {
+  padding: 0 0 var(--space-2);
+  border: 0;
+  border-bottom: 3px solid transparent;
+  color: var(--color-muted);
+  background: transparent;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.home-page__filter-nav button.is-active {
+  border-bottom-color: var(--color-ink);
+  color: var(--color-ink);
+}
+
+.home-page__empty {
+  margin: var(--space-10) 0;
+  color: var(--color-muted);
+  text-align: center;
+}
+
 @media (min-width: 768px) {
   .home-page .page-intro__description {
     font-size: var(--font-size-lead);
+  }
+
+  .home-page__exercises-layout {
+    grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr);
+    align-items: start;
+    gap: var(--space-12);
+  }
+
+  .home-page__catalog-title {
+    font-size: var(--section-font-size);
+    line-height: var(--section-line-height);
+  }
+
+  .home-page__catalog-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+  }
+
+  .home-page__quote-slot {
+    min-height: 300px;
+  }
+
+  .home-page__search {
+    margin-left: 0;
   }
 }

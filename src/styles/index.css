@@ -1,11 +1,16 @@
 @import './tokens.css';
+@import './scrollbar.css';
 @import './design-system.css';
 @import '../components/app-shell/app-shell.css';
 @import '../components/button/button.css';
 @import '../components/icon/icon.css';
+@import '../components/breadcrumbs/breadcrumbs.css';
 @import '../components/search-field/search-field.css';
+@import '../components/exercise-card/exercise-card.css';
+@import '../components/exercise-modal/exercise-modal.css';
 @import '../pages/home-page/home-page.css';
 @import '../pages/favorites-page/favorites-page.css';
+
 :root {
   font-family: var(--font-family);
   font-size: var(--font-size-body);
@@ -32,6 +37,10 @@ body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
+}
+
+body.favorites-active .page-content {
+  padding-block: 0;
 }
 
 a {

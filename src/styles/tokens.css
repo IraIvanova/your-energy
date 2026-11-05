@@ -19,7 +19,6 @@
   --color-subtle: rgb(36 36 36 / 40%);
   --color-border: rgb(36 36 36 / 10%);
   --color-rating: #eea10c;
-  --color-pagination-muted: #d4d4d4;
   --color-inverse-muted: rgb(244 244 244 / 60%);
   --color-inverse-subtle: rgb(244 244 244 / 40%);
   --color-inverse-border: rgb(244 244 244 / 10%);
@@ -50,6 +49,9 @@
   --grid-gap: 20px;
   --surface-padding: 20px;
   --control-height: 42px;
+  --scrollbar-size: 8px;
+  --scrollbar-radius: 12px;
+  --scrollbar-gap: 16px;
   --hero-font-size: 38px;
   --hero-line-height: 44px;
   --section-font-size: 28px;

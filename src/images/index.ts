@@ -49,8 +49,6 @@ import instagramMobileLight from './icons/instagram-mobile-light.svg';
 import youtubeMobileLight from './icons/youtube-mobile-light.svg';
 import scrollTop from './icons/scroll-top.svg';
 import scrollTopMobile from './icons/scroll-top-mobile.svg';
-import paginationPrevious from './icons/pagination-previous.svg';
-import paginationNext from './icons/pagination-next.svg';
 
 export const images = {
   hero,
@@ -107,6 +105,4 @@ export const icons = {
   youtubeMobileLight,
   scrollTop,
   scrollTopMobile,
-  paginationPrevious,
-  paginationNext,
 };

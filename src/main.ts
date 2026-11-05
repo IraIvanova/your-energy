@@ -5,8 +5,10 @@ import '@fontsource/dm-sans/latin-500.css';
 import '@fontsource/dm-sans/latin-700.css';
 import { initAppShell } from './components/app-shell/app-shell';
 import { initSearchFields } from './components/search-field/search-field';
+import { initExerciseModal } from './components/exercise-modal/exercise-modal';
 import './pages/home-page/home-page';
 import './pages/favorites-page/favorites-page';
 
 initAppShell();
 initSearchFields();
+initExerciseModal();
