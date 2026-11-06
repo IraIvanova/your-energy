@@ -6,6 +6,14 @@ import type {
   Quote,
 } from './types';
 
+export type {
+  Exercise,
+  ExercisesResponse,
+  Filter,
+  FiltersResponse,
+  Quote,
+} from './types';
+
 const API_BASE_URL = 'https://your-energy.b.goit.study/api';
 
 export class ApiError extends Error {
@@ -34,14 +42,49 @@ export async function fetchJson<T>(
   return (await response.json()) as T;
 }
 
+export type FilterName = Filter['filter'];
+export type ExerciseFilter = 'muscles' | 'bodypart' | 'equipment';
+export type FilterExercise = Filter;
+export type FilterResponse = FiltersResponse;
+
+function normalizePage<T extends { page: number | string }>(response: T): T {
+  return { ...response, page: Number(response.page) };
+}
+
 export function getExercises(page = 1, limit = 9): Promise<ExercisesResponse> {
   return fetchJson<ExercisesResponse>(
     `${API_BASE_URL}/exercises?page=${page}&limit=${limit}`
-  );
+  ).then(normalizePage);
+}
+
+export function getFilters(page = 1, limit = 12): Promise<FiltersResponse> {
+  return fetchJson<FiltersResponse>(
+    `${API_BASE_URL}/filters?page=${page}&limit=${limit}`
+  ).then(normalizePage);
+}
+
+export function getFiltersOfExercises(
+  filter: FilterName,
+  page: number,
+  limit: number
+): Promise<FilterResponse> {
+  return getFiltersByType(filter, page, limit);
+}
+
+function getFiltersByType(
+  filter: FilterName,
+  page: number,
+  limit: number
+): Promise<FilterResponse> {
+  return fetchJson<FilterResponse>(
+    `${API_BASE_URL}/filters?filter=${encodeURIComponent(
+      filter
+    )}&page=${page}&limit=${limit}`
+  ).then(normalizePage);
 }
 
 export function getExercisesByFilter(
-  filterType: Filter['filter'],
+  filterType: FilterName | ExerciseFilter,
   filterName: string,
   page = 1,
   limit = 9,
@@ -52,27 +95,25 @@ export function getExercisesByFilter(
       ? 'bodypart'
       : filterType === 'Equipment'
         ? 'equipment'
-        : 'muscle';
-  const search = keyword.trim()
-    ? `&keyword=${encodeURIComponent(keyword.trim())}`
-    : '';
-  return fetchJson<ExercisesResponse>(
-    `${API_BASE_URL}/exercises?${parameter}=${encodeURIComponent(
-      filterName
-    )}&page=${page}&limit=${limit}${search}`
-  );
-}
+        : filterType === 'Muscles'
+          ? 'muscles'
+          : filterType;
+  const query = new URLSearchParams({
+    [parameter]: filterName,
+    page: String(page),
+    limit: String(limit),
+  });
+  if (keyword.trim()) query.set('keyword', keyword.trim());
 
-export function getFilters(page = 1, limit = 12): Promise<FiltersResponse> {
-  return fetchJson<FiltersResponse>(
-    `${API_BASE_URL}/filters?page=${page}&limit=${limit}`
-  );
+  return fetchJson<ExercisesResponse>(
+    `${API_BASE_URL}/exercises?${query}`
+  ).then(normalizePage);
 }
 
 export async function getAllFilters(): Promise<Filter[]> {
   const firstPage = await getFilters();
   const remainingPages = await Promise.all(
-    Array.from({ length: firstPage.totalPages - 1 }, (_, index) =>
+    Array.from({ length: Math.max(firstPage.totalPages - 1, 0) }, (_, index) =>
       getFilters(index + 2)
     )
   );
