@@ -1,316 +1,297 @@
-import { getAllFilters } from '../../services/api';
 import { createCatalogRequests } from '../../services/pagination';
 import type { Filter } from '../../services/types';
 import { icons } from '../../images';
-import { createCategoryCard } from '../../components/category-card/category-card';
+import {
+  buildCategoryHash,
+  createCategoryCard,
+  toUrlSlug,
+} from '../../components/category-card/category-card';
 import { createExerciseCard } from '../../components/exercise-card/exercise-card';
 
-async function initHomePage(): Promise<void> {
+type FilterType = Filter['filter'];
+
+const FILTER_TYPES: FilterType[] = ['Muscles', 'Body parts', 'Equipment'];
+const DEFAULT_FILTER: FilterType = 'Muscles';
+
+interface Route {
+  filter: FilterType;
+  category: string | null;
+  keyword: string;
+}
+
+function initHomePage(): void {
+  // Shared component markup also exists on the favorites page,
+  // so every query is scoped to the home page.
   const root = document.querySelector<HTMLElement>('[data-page="/"]');
   if (!root) throw new Error('Home page is missing.');
-  const categories = root.querySelector<HTMLElement>('[data-home-categories]');
-  const exercises = root.querySelector<HTMLElement>('[data-home-exercises]');
-  const list = root.querySelector<HTMLElement>('[data-home-list]');
-  const categoryTitle = root.querySelector<HTMLElement>(
-    '[data-home-category-title]'
-  );
-  const catalogTitle = root.querySelector<HTMLElement>(
-    '[data-exercises-title]'
-  );
-  const back = root.querySelector<HTMLAnchorElement>('[data-breadcrumb-home]');
-  const breadcrumbs = root.querySelector<HTMLElement>('[data-breadcrumbs]');
-  const breadcrumbCurrent = root.querySelector<HTMLElement>(
-    '[data-breadcrumb-current]'
-  );
-  const search = root.querySelector<HTMLFormElement>('[data-home-search]');
-  const searchInput = root.querySelector<HTMLInputElement>(
+
+  const query = <T extends Element>(selector: string): T => {
+    const element = root.querySelector<T>(selector);
+    if (!element) {
+      throw new Error(`Home page is missing ${selector}.`);
+    }
+    return element;
+  };
+
+  const categories = query<HTMLElement>('[data-home-categories]');
+  const categoriesEmpty = query<HTMLElement>('[data-home-categories-empty]');
+  const exercises = query<HTMLElement>('[data-home-exercises]');
+  const list = query<HTMLElement>('[data-home-list]');
+  const categoryTitle = query<HTMLElement>('[data-home-category-title]');
+  const catalogTitle = query<HTMLElement>('[data-exercises-title]');
+  const back = query<HTMLAnchorElement>('[data-breadcrumb-home]');
+  const breadcrumbs = query<HTMLElement>('[data-breadcrumbs]');
+  const breadcrumbCurrent = query<HTMLElement>('[data-breadcrumb-current]');
+  const search = query<HTMLFormElement>('[data-home-search]');
+  const searchInput = query<HTMLInputElement>(
     '[data-home-search] [data-search-input]'
   );
-  const empty = root.querySelector<HTMLElement>('[data-home-empty]');
-  const filterNav = root.querySelector<HTMLElement>('[data-home-filter-nav]');
-  const categoryTemplate = root.querySelector<HTMLTemplateElement>(
+  const empty = query<HTMLElement>('[data-home-empty]');
+  const filterNav = query<HTMLElement>('[data-home-filter-nav]');
+  const categoryTemplate = query<HTMLTemplateElement>(
     '[data-category-template]'
   );
-  const template = root.querySelector<HTMLTemplateElement>(
-    '[data-home-template]'
-  );
-  const error = root.querySelector<HTMLElement>('[data-home-error]');
-  const filtersPagination = root.querySelector<HTMLElement>(
+  const exerciseTemplate = query<HTMLTemplateElement>('[data-home-template]');
+  const error = query<HTMLElement>('[data-home-error]');
+  const errorText = query<HTMLElement>('[data-home-error-text]');
+  const retry = query<HTMLButtonElement>('[data-home-retry]');
+  let retrySource: 'filters' | 'exercises' = 'filters';
+  const filtersPagination = query<HTMLElement>(
     '[data-home-filters-pagination]'
   );
-  const exercisesPagination = root.querySelector<HTMLElement>(
+  const exercisesPagination = query<HTMLElement>(
     '[data-home-exercises-pagination]'
   );
-  if (
-    !categories ||
-    !exercises ||
-    !list ||
-    !categoryTitle ||
-    !catalogTitle ||
-    !back ||
-    !breadcrumbs ||
-    !breadcrumbCurrent ||
-    !search ||
-    !searchInput ||
-    !empty ||
-    !filterNav ||
-    !categoryTemplate ||
-    !template ||
-    !error ||
-    !filtersPagination ||
-    !exercisesPagination
-  ) {
-    throw new Error('Home page is missing its exercise catalog.');
-  }
-  const categoriesElement = categories;
-  const exercisesElement = exercises;
-  const listElement = list;
-  const categoryTitleElement = categoryTitle;
-  const catalogTitleElement = catalogTitle;
-  const categoryTemplateElement = categoryTemplate;
-  const templateElement = template;
-  const backElement = back;
-  const breadcrumbsElement = breadcrumbs;
-  const breadcrumbCurrentElement = breadcrumbCurrent;
-  const searchElement = search;
-  const searchInputElement = searchInput;
-  const emptyElement = empty;
-  const filterNavElement = filterNav;
-  const errorElement = error;
-  const filtersPaginationElement = filtersPagination;
-  const exercisesPaginationElement = exercisesPagination;
-  let activeFilter: Filter['filter'] = 'Muscles';
-  let allFilters: Filter[] = [];
-  let filtersPage = 1;
-  let currentExercisesPage = 1;
-  let currentExercisesTotalPages = 0;
-  const filtersPerPage = window.matchMedia('(max-width: 767px)').matches
-    ? 9
-    : 12;
-  const catalogRequests = createCatalogRequests(
-    () => undefined,
+
+  const catalog = createCatalogRequests(
     response => {
-      if (response.page !== currentExercisesPage) return;
-      errorElement.hidden = true;
-      currentExercisesTotalPages = response.totalPages;
-      listElement.textContent = '';
-      emptyElement.hidden = response.results.length !== 0;
-      listElement.hidden = response.results.length === 0;
-      response.results.forEach(exercise => {
-        listElement.append(
-          createExerciseCard(templateElement, exercise, false)
-        );
-      });
+      error.hidden = true;
+      categories.textContent = '';
+      for (const filter of response.results) {
+        categories.append(createCategoryCard(categoryTemplate, filter));
+      }
+      const isEmpty = response.results.length === 0;
+      categoriesEmpty.hidden = !isEmpty;
+      categories.hidden = isEmpty;
       renderPagination(
-        exercisesPaginationElement,
-        currentExercisesPage,
-        currentExercisesTotalPages,
+        filtersPagination,
+        response.page,
+        response.totalPages,
+        page => catalog.changeFiltersPage(page)
+      );
+    },
+    response => {
+      error.hidden = true;
+      list.textContent = '';
+      for (const exercise of response.results) {
+        list.append(createExerciseCard(exerciseTemplate, exercise, false));
+      }
+      const isEmpty = response.results.length === 0;
+      empty.hidden = !isEmpty;
+      list.hidden = isEmpty;
+      renderPagination(
+        exercisesPagination,
+        response.page,
+        response.totalPages,
         page => {
-          currentExercisesPage = page;
-          catalogRequests.changeExercisesPage(page);
+          catalog.changeExercisesPage(page);
+          exercises.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       );
     },
-    () => {
-      listElement.textContent = '';
-      emptyElement.hidden = true;
-      exercisesPaginationElement.hidden = true;
-      showError("We couldn't load exercises. Please try again later.");
+    (_error, source) => {
+      if (source === 'filters') {
+        categories.textContent = '';
+        categoriesEmpty.hidden = true;
+        filtersPagination.hidden = true;
+        showError('Unable to load categories. Please try again.', source);
+      } else {
+        list.textContent = '';
+        empty.hidden = true;
+        exercisesPagination.hidden = true;
+        showError('Unable to load exercises. Please try again.', source);
+      }
     }
   );
 
-  try {
-    setDefaultFilter();
-    activeFilter = getFilterFromHash() ?? activeFilter;
-    allFilters = await getAllFilters();
-    categoriesElement.textContent = '';
-    for (const filter of allFilters) {
-      categoriesElement.append(
-        createCategoryCard(categoryTemplateElement, filter)
-      );
+  function showError(
+    message: string,
+    source: 'filters' | 'exercises' | null = null
+  ): void {
+    errorText.textContent = message;
+    retry.hidden = source === null;
+    if (source) retrySource = source;
+    error.hidden = false;
+  }
+
+  retry.addEventListener('click', () => {
+    error.hidden = true;
+    if (retrySource === 'filters') {
+      void catalog.loadFilters();
+    } else {
+      void catalog.loadExercises();
     }
-    renderCategoryList(activeFilter);
+  });
 
-    categoriesElement.addEventListener('click', event => {
-      const link = (event.target as HTMLElement).closest<HTMLAnchorElement>(
-        '[data-category-name]'
-      );
-      if (link) {
-        event.preventDefault();
-        window.location.hash = buildCategoryHash(
-          link.dataset.categoryType ?? '',
-          link.dataset.categoryName ?? ''
-        );
-      }
-    });
-    filterNavElement.addEventListener('click', event => {
-      const button = (event.target as HTMLElement).closest<HTMLButtonElement>(
-        '[data-filter-type]'
-      );
-      if (!button?.dataset.filterType) return;
-      window.location.hash = `#/category/${toUrlSlug(
-        button.dataset.filterType
-      )}`;
-    });
-    searchElement.addEventListener('submit', event => {
-      event.preventDefault();
-      const params = getCategoryParams();
-      window.location.hash = buildCategoryHash(
-        params.categoryType,
-        params.category,
-        searchInputElement.value.trim()
-      );
-    });
-    window.addEventListener('hashchange', safeRenderCategory);
-    safeRenderCategory();
-  } catch {
-    showError("We couldn't load categories. Please try again later.");
-  }
-
-  function showError(message: string): void {
-    errorElement.textContent = message;
-    errorElement.hidden = false;
-  }
-
-  function safeRenderCategory(): void {
-    try {
-      renderCategory();
-    } catch {
-      catalogRequests.cancelExercises();
-      showError("We couldn't find this category. Please choose another one.");
+  function setActiveFilter(filter: FilterType): void {
+    for (const button of filterNav.querySelectorAll<HTMLButtonElement>(
+      '[data-filter-type]'
+    )) {
+      const isActive = button.dataset.filterType === filter;
+      button.classList.toggle('is-active', isActive);
+      button.setAttribute('aria-pressed', String(isActive));
     }
   }
 
-  function renderCategory(): void {
+  function showCategoriesView(route: Route): void {
+    catalog.cancelExercises();
+    const filterChanged =
+      route.filter !== catalog.state.filter ||
+      catalog.state.filters.totalPages === 0;
+
+    setActiveFilter(route.filter);
+    catalogTitle.hidden = false;
+    breadcrumbs.hidden = true;
+    search.hidden = true;
+    exercises.hidden = true;
+    categories.hidden = false;
+    error.hidden = true;
+
+    if (filterChanged) {
+      categories.textContent = '';
+      categoriesEmpty.hidden = true;
+      filtersPagination.hidden = true;
+      catalog.changeFilter(route.filter);
+    } else {
+      // Coming back from a category: keep the already rendered page.
+      catalog.state.category = '';
+      filtersPagination.hidden = catalog.state.filters.totalPages <= 1;
+      categoriesEmpty.hidden = categories.childElementCount !== 0;
+      categories.hidden = categories.childElementCount === 0;
+    }
+  }
+
+  function showExercisesView(route: Route & { category: string }): void {
+    catalog.cancelFilters();
+    setActiveFilter(route.filter);
+    back.href = `#/category/${toUrlSlug(route.filter)}`;
+    categoryTitle.textContent = route.category;
+    breadcrumbCurrent.textContent = capitalizeFirstLetter(route.category);
+    catalogTitle.hidden = true;
+    breadcrumbs.hidden = false;
+    search.hidden = false;
+    categories.hidden = true;
+    categoriesEmpty.hidden = true;
+    filtersPagination.hidden = true;
+    exercises.hidden = false;
+    error.hidden = true;
+    empty.hidden = true;
+    list.textContent = '';
+    exercisesPagination.hidden = true;
+    searchInput.value = route.keyword;
+    searchInput.dispatchEvent(new Event('input'));
+
+    if (catalog.state.filter !== route.filter) {
+      // Keep the category list in sync for the breadcrumb "back" step.
+      catalog.state.filter = route.filter;
+      catalog.state.filters.page = 1;
+      catalog.state.filters.totalPages = 0;
+      categories.textContent = '';
+    }
+    catalog.state.category = route.category;
+    catalog.state.keyword = route.keyword;
+    catalog.changeExercisesPage(1);
+  }
+
+  function render(): void {
     const hash = window.location.hash;
     if (hash === '' || hash === '#' || hash === '#/') {
-      // Home link / breadcrumb: keep the currently selected filter
-      // instead of falling back to a list with every category type.
-      window.location.replace(`#/category/${toUrlSlug(activeFilter)}`);
+      // Home: show the current filter (Muscles by default).
+      window.history.replaceState(
+        null,
+        '',
+        `#/category/${toUrlSlug(catalog.state.filter)}`
+      );
+      render();
       return;
     }
-    const match = hash.match(/^#\/category\/([^/?]+)(?:\/([^?]+))?/);
-    if (!match) {
-      // Another route (e.g. favorites): drop pending catalog responses.
-      catalogRequests.cancelExercises();
-      renderCategoryList(activeFilter);
-      categoriesElement.hidden = false;
-      filtersPaginationElement.hidden = false;
-      exercisesElement.hidden = true;
-      breadcrumbsElement.hidden = true;
-      catalogTitleElement.hidden = false;
-      searchElement.hidden = true;
-      filterNavElement.hidden = false;
-      return;
-    }
-    const categoryType = findFilterType(match[1]);
-    if (categoryType !== activeFilter) filtersPage = 1;
-    activeFilter = categoryType;
-    errorElement.hidden = true;
-    if (!match[2]) {
-      catalogRequests.cancelExercises();
-      renderCategoryList(categoryType);
-      categoriesElement.hidden = false;
-      filtersPaginationElement.hidden = false;
-      exercisesElement.hidden = true;
-      breadcrumbsElement.hidden = true;
-      catalogTitleElement.hidden = false;
-      searchElement.hidden = true;
-      filterNavElement.hidden = false;
-      return;
-    }
-    const category = findCategoryName(categoryType, match[2]);
-    backElement.href = `#/category/${toUrlSlug(categoryType)}`;
-    categoryTitleElement.textContent = category;
-    categoriesElement.hidden = true;
-    filtersPaginationElement.hidden = true;
-    exercisesElement.hidden = false;
-    breadcrumbsElement.hidden = false;
-    catalogTitleElement.hidden = true;
-    searchElement.hidden = false;
-    filterNavElement
-      .querySelectorAll<HTMLButtonElement>('[data-filter-type]')
-      .forEach(button => {
-        button.classList.toggle(
-          'is-active',
-          button.dataset.filterType === categoryType
-        );
-      });
-    breadcrumbCurrentElement.textContent = capitalizeFirstLetter(category);
-    listElement.textContent = '';
-    const params = getCategoryParams();
-    searchInputElement.value = params.query.get('keyword') ?? '';
-    catalogRequests.state.filter = categoryType;
-    catalogRequests.state.category = category;
-    catalogRequests.state.keyword = searchInputElement.value;
-    currentExercisesPage = 1;
-    currentExercisesTotalPages = 0;
-    catalogRequests.changeExercisesPage(1);
-  }
 
-  function renderCategoryList(selectedCategoryType?: Filter['filter']): void {
-    filterNavElement
-      .querySelectorAll<HTMLButtonElement>('[data-filter-type]')
-      .forEach((button, index) => {
-        button.classList.toggle(
-          'is-active',
-          selectedCategoryType
-            ? button.dataset.filterType === selectedCategoryType
-            : index === 0
+    const route = parseRoute(hash);
+    if (!route) {
+      // Another page (favorites): ignore late catalog responses.
+      catalog.cancelExercises();
+      catalog.cancelFilters();
+      if (hash.startsWith('#/category')) {
+        window.history.replaceState(
+          null,
+          '',
+          `#/category/${toUrlSlug(DEFAULT_FILTER)}`
         );
-      });
-    categoriesElement
-      .querySelectorAll<HTMLElement>('[data-category-name]')
-      .forEach(categoryElement => {
-        const matchesFilter =
-          !selectedCategoryType ||
-          toUrlSlug(categoryElement.dataset.categoryType ?? '') ===
-            toUrlSlug(selectedCategoryType);
-        const index = Array.from(
-          categoriesElement.querySelectorAll<HTMLElement>(
-            `[data-category-name][data-category-type="${selectedCategoryType}"]`
-          )
-        ).indexOf(categoryElement);
-        categoryElement.hidden =
-          !matchesFilter ||
-          (index >= 0 && index < (filtersPage - 1) * filtersPerPage) ||
-          (index >= 0 && index >= filtersPage * filtersPerPage);
-      });
-    renderFiltersPagination();
-  }
-
-  function renderFiltersPagination(): void {
-    const totalPages = Math.ceil(
-      allFilters.filter(filter => filter.filter === activeFilter).length /
-        filtersPerPage
-    );
-    renderPagination(
-      filtersPaginationElement,
-      filtersPage,
-      totalPages,
-      page => {
-        filtersPage = page;
-        renderCategoryList(activeFilter);
+        render();
       }
+      return;
+    }
+
+    if (route.category) {
+      showExercisesView({ ...route, category: route.category });
+    } else {
+      showCategoriesView(route);
+    }
+  }
+
+  filterNav.addEventListener('click', event => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>(
+      '[data-filter-type]'
     );
-  }
+    const filter = FILTER_TYPES.find(
+      type => type === button?.dataset.filterType
+    );
+    if (!filter) return;
+    window.location.hash = `#/category/${toUrlSlug(filter)}`;
+  });
 
-  function setDefaultFilter(): void {
-    const hash = window.location.hash;
-    if (hash && hash !== '#/' && hash !== '#') return;
+  search.addEventListener('submit', event => {
+    event.preventDefault();
+    const route = parseRoute(window.location.hash);
+    if (!route?.category) return;
+    const next = buildCategoryHash(
+      route.filter,
+      route.category,
+      searchInput.value.trim()
+    );
+    if (next === window.location.hash) {
+      // Same query submitted again: reload the first page.
+      catalog.changeKeyword(searchInput.value.trim());
+    } else {
+      window.location.hash = next;
+    }
+  });
 
-    window.history.replaceState(null, '', '#/category/muscles');
-  }
+  window.addEventListener('hashchange', render);
 
-  function getFilterFromHash(): Filter['filter'] | null {
-    const match = window.location.hash.match(/^#\/category\/([^/?]+)/);
-    if (!match) return null;
+  render();
+}
+
+function parseRoute(hash: string): Route | null {
+  const match = hash.match(/^#\/category\/([^/?]+)(?:\/([^?]+))?(?:\?(.*))?$/);
+  if (!match) return null;
+  const filter = FILTER_TYPES.find(type => toUrlSlug(type) === match[1]);
+  if (!filter) return null;
+
+  let category: string | null = null;
+  if (match[2]) {
     try {
-      return findFilterType(match[1]);
+      category = decodeURIComponent(match[2]).trim() || null;
     } catch {
       return null;
     }
   }
+
+  return {
+    filter,
+    category,
+    keyword: new URLSearchParams(match[3] ?? '').get('keyword') ?? '',
+  };
 }
 
 function renderPagination(
@@ -344,8 +325,11 @@ function renderPagination(
     button.textContent = String(value);
     button.classList.toggle('is-active', value === page);
     button.setAttribute('aria-label', `Page ${value}`);
-    if (value === page) button.setAttribute('aria-current', 'page');
-    button.addEventListener('click', () => onChange(value));
+    if (value === page) {
+      button.setAttribute('aria-current', 'page');
+    } else {
+      button.addEventListener('click', () => onChange(value));
+    }
     container.append(button);
   };
 
@@ -419,74 +403,8 @@ function renderPagination(
   );
 }
 
-function buildCategoryHash(
-  categoryType: string,
-  category: string,
-  keyword = ''
-): string {
-  const query = new URLSearchParams();
-  if (keyword) query.set('keyword', keyword);
-  const queryString = query.toString();
-  return `#/category/${toUrlSlug(categoryType)}/${toUrlSlug(category)}${
-    queryString ? `?${queryString}` : ''
-  }`;
-}
-
-function getCategoryParams(): {
-  categoryType: Filter['filter'];
-  category: string;
-  query: URLSearchParams;
-} {
-  const match = window.location.hash.match(/^#\/category\/([^/]+)\/([^?]+)/);
-  if (!match) {
-    throw new Error('Category route is missing.');
-  }
-  const categoryType = findFilterType(match[1]);
-  return {
-    categoryType,
-    category: findCategoryName(categoryType, match[2]),
-    query: new URLSearchParams(window.location.hash.split('?')[1] ?? ''),
-  };
-}
-
-function toUrlSlug(value: string): string {
-  return value
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
 function capitalizeFirstLetter(value: string): string {
   return value ? `${value[0].toUpperCase()}${value.slice(1)}` : value;
 }
 
-function findFilterType(slug: string): Filter['filter'] {
-  const normalized = toUrlSlug(slug);
-  const filterType = ['Muscles', 'Body parts', 'Equipment'].find(
-    filter => toUrlSlug(filter) === normalized
-  );
-  if (!filterType) {
-    throw new Error('Unknown exercise filter.');
-  }
-  return filterType as Filter['filter'];
-}
-
-function findCategoryName(filterType: Filter['filter'], slug: string): string {
-  const normalized = toUrlSlug(slug);
-  for (const category of document.querySelectorAll<HTMLElement>(
-    '[data-category-name]'
-  )) {
-    const categoryName = category.dataset.categoryName;
-    if (
-      category.dataset.categoryType === filterType &&
-      categoryName &&
-      toUrlSlug(categoryName) === normalized
-    ) {
-      return categoryName;
-    }
-  }
-  throw new Error('Unknown exercise category.');
-}
-
-void initHomePage();
+initHomePage();

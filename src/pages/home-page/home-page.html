@@ -81,10 +81,21 @@
         <load src="components/daily-norm/daily-norm.html" />
       </aside>
       <div class="home-page__catalog">
-        <p class="home-page__error" data-home-error hidden>
-          We couldn't load categories. Please try again later.
-        </p>
+        <div class="home-page__error" data-home-error role="alert" hidden>
+          <p data-home-error-text>
+            Unable to load categories. Please try again.
+          </p>
+          <button class="home-page__retry" type="button" data-home-retry hidden>
+            Try again
+          </button>
+        </div>
         <div class="home-page__categories" data-home-categories></div>
+        <p class="home-page__empty" data-home-categories-empty hidden>
+          Unfortunately, no results were found. You may want to consider other
+          search options to find the exercise you are looking for. Our range is
+          wide and you have the opportunity to find more options that suit your
+          needs.
+        </p>
         <nav
           class="home-page__pagination pagination"
           aria-label="Categories pagination"
@@ -94,7 +105,10 @@
         <div class="home-page__exercises" data-home-exercises hidden>
           <h2 class="ui-heading visually-hidden" data-home-category-title></h2>
           <p class="home-page__empty" data-home-empty hidden>
-            No exercises found. Try another search.
+            Unfortunately, no results were found. You may want to consider other
+            search options to find the exercise you are looking for. Our range
+            is wide and you have the opportunity to find more options that suit
+            your needs.
           </p>
           <div class="exercise-grid home-page__list" data-home-list></div>
           <nav

@@ -40,7 +40,7 @@ const initialState: CatalogState = {
 export function createCatalogRequests(
   onFilters: (response: FilterResponse) => void,
   onExercises: (response: ExercisesResponse) => void,
-  onError: (error: unknown) => void
+  onError: (error: unknown, source: 'filters' | 'exercises') => void
 ) {
   const state = structuredClone(initialState);
   let filtersRequestId = 0;
@@ -62,7 +62,7 @@ export function createCatalogRequests(
       state.filters.page = response.page;
       onFilters(response);
     } catch (error) {
-      if (requestId === filtersRequestId) onError(error);
+      if (requestId === filtersRequestId) onError(error, 'filters');
     }
   }
 
@@ -86,7 +86,7 @@ export function createCatalogRequests(
       state.exercises.page = response.page;
       onExercises(response);
     } catch (error) {
-      if (requestId === exercisesRequestId) onError(error);
+      if (requestId === exercisesRequestId) onError(error, 'exercises');
     }
   }
 

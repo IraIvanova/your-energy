@@ -27,10 +27,35 @@
   object-fit: cover;
 }
 
-.category-card__name {
-  position: relative;
+.category-card__text {
+  position: absolute;
   z-index: 1;
-  font-size: var(--font-size-body);
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  text-align: center;
+}
+
+.category-card__name {
+  font-size: var(--card-font-size);
+  line-height: 1;
+  text-transform: capitalize;
+}
+
+.category-card__filter {
+  margin-top: 2px;
+  color: var(--color-inverse-subtle);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-xs);
+}
+
+@media (min-width: 768px) {
+  .category-card__name {
+    font-size: 24px;
+  }
 }
 
 @media (min-width: 1200px) {

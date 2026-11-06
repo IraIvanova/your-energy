@@ -96,8 +96,31 @@
 }
 
 .home-page__error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
   margin-top: var(--space-6);
   color: var(--color-muted);
+}
+
+.home-page__error p {
+  margin: 0;
+}
+
+.home-page__retry {
+  padding: var(--space-2) var(--space-5);
+  border: var(--border-width) solid var(--color-ink);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink);
+  background: transparent;
+  cursor: pointer;
+}
+
+.home-page__retry:hover,
+.home-page__retry:focus-visible {
+  color: var(--color-canvas);
+  background: var(--color-ink);
 }
 
 .home-page__categories {
