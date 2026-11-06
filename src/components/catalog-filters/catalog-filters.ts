@@ -28,4 +28,10 @@ export function initCatalogFilters(
   });
 
   render(getCatalogState());
+
+  return () => {
+    selectFilter('Muscles');
+    render(getCatalogState());
+    refreshCatalog();
+  };
 }

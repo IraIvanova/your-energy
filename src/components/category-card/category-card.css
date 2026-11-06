@@ -18,6 +18,11 @@
   object-fit: cover;
 }
 
+.category-card:focus-visible {
+  outline: 3px solid var(--color-ink);
+  outline-offset: 4px;
+}
+
 .category-card::after {
   position: absolute;
   inset: 0;

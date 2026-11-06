@@ -1,10 +1,12 @@
 import { initCatalogFilters } from '../../components/catalog-filters/catalog-filters';
 import { initCategoryCatalog } from '../../components/category-catalog/category-catalog';
 
-const home = document.querySelector<HTMLElement>('.home-page__exercises');
-if (home) {
+export function initHomePage(): (() => void) | undefined {
+  const home = document.querySelector<HTMLElement>('.home-page__exercises');
+  if (!home) return;
+
   const refreshCatalog = initCategoryCatalog(home);
   if (refreshCatalog) {
-    initCatalogFilters(home, refreshCatalog);
+    return initCatalogFilters(home, refreshCatalog);
   }
 }
