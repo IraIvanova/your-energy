@@ -1,4 +1,4 @@
-import { fetchJson, ApiError } from '../../services/api';
+import { ApiError, subscribe } from '../../services/api';
 
 const form = document.getElementById(
   'footer-subscription-form'
@@ -23,12 +23,9 @@ if (form && emailInput && messageEl) {
     const email = emailInput.value.trim();
 
     try {
-      await fetchJson('/api/subscription', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-      messageEl.textContent = 'Thank you! You are subscribed.';
+      const response = await subscribe(email);
+      messageEl.textContent =
+        response.message || 'Thank you! You are subscribed.';
       messageEl.style.color = '#4caf50';
       form.reset();
     } catch (error) {

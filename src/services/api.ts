@@ -33,10 +33,22 @@ export async function fetchJson<T>(
   const response = await fetch(url, options);
 
   if (!response.ok) {
-    throw new ApiError(
-      `Request failed: ${response.status} ${response.statusText}`.trim(),
-      response.status
-    );
+    // Prefer the backend's own message (e.g. "Subscription already exists").
+    let message = `Request failed: ${response.status} ${response.statusText}`;
+    try {
+      const body: unknown = await response.json();
+      if (
+        typeof body === 'object' &&
+        body !== null &&
+        'message' in body &&
+        typeof body.message === 'string'
+      ) {
+        message = body.message;
+      }
+    } catch {
+      // Response has no JSON body.
+    }
+    throw new ApiError(message.trim(), response.status);
   }
 
   return (await response.json()) as T;
@@ -136,6 +148,14 @@ export function getExerciseById(id: string): Promise<Exercise> {
   return fetchJson<Exercise>(
     `${API_BASE_URL}/exercises/${encodeURIComponent(id)}`
   );
+}
+
+export function subscribe(email: string): Promise<{ message?: string }> {
+  return fetchJson<{ message?: string }>(`${API_BASE_URL}/subscription`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
 }
 
 export function getExercisesByIds(ids: string[]): Promise<Exercise[]> {
