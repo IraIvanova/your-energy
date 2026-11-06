@@ -74,7 +74,14 @@ export const getFiltersOfExercises = async (
     limit: String(limit),
   });
 
-  return fetchJson<FilterResponse>(`${BASE_URL}/filters?${query}`);
+  const response = await fetchJson<FilterResponse>(
+    `${BASE_URL}/filters?${query}`
+  );
+
+  return {
+    ...response,
+    page: Number(response.page),
+  };
 };
 
 export const getExercisesByFilter = async (
@@ -91,5 +98,12 @@ export const getExercisesByFilter = async (
     ...(keyword && { keyword }),
   });
 
-  return fetchJson<ExercisesResponse>(`${BASE_URL}/exercises?${query}`);
+  const response = await fetchJson<ExercisesResponse>(
+    `${BASE_URL}/exercises?${query}`
+  );
+
+  return {
+    ...response,
+    page: Number(response.page),
+  };
 };

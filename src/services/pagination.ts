@@ -91,6 +91,7 @@ export function createCatalogRequests(
   }
 
   function changeFilter(filter: FilterName): void {
+    exercisesRequestId++;
     state.filter = filter;
     state.category = '';
     state.filters.page = 1;
@@ -99,12 +100,14 @@ export function createCatalogRequests(
   }
 
   function changeCategory(category: string): void {
+    exercisesRequestId++;
     state.category = category;
     state.exercises.page = 1;
     void loadExercises();
   }
 
   function changeKeyword(keyword: string): void {
+    exercisesRequestId++;
     state.keyword = keyword;
     state.exercises.page = 1;
     void loadExercises();
