@@ -1,27 +1,90 @@
 <div class="app-shell">
   <header class="site-header">
     <a class="site-header__brand" href="#/" aria-label="Your Energy home">
+      <span class="site-header__logo site-header__logo--dark">
+        <load
+          src="components/icon/icon.html"
+          src-url="./images/icons/logo.svg"
+          label=""
+        />
+      </span>
+      <span class="site-header__logo site-header__logo--light">
+        <load
+          src="components/icon/icon.html"
+          src-url="./images/icons/logo-light.svg"
+          label=""
+        />
+      </span>
+    </a>
+
+    <button
+      type="button"
+      class="site-header__menu-toggle"
+      aria-expanded="false"
+      aria-controls="site-menu"
+      aria-label="Open menu"
+    >
       <load
         src="components/icon/icon.html"
-        src-url="./images/icons/logo.svg"
+        src-url="./images/icons/menu.svg"
         label=""
       />
-    </a>
-    <nav class="site-nav" aria-label="Main navigation">
-      <a
-        class="site-nav__link active"
-        href="#/"
-        data-route="/"
-        aria-current="page"
-        >Home</a
-      >
-      <a class="site-nav__link" href="#/favorites" data-route="/favorites">
-        Favorites
-      </a>
-    </nav>
+    </button>
+
+    <div class="site-header__actions">
+      <nav class="site-nav" aria-label="Main navigation">
+        <a
+          class="site-nav__link active"
+          href="#/"
+          data-route="/"
+          aria-current="page"
+          >Home</a
+        >
+        <a class="site-nav__link" href="#/favorites" data-route="/favorites">
+          Favorites
+        </a>
+      </nav>
+      <load src="components/social-links/social-links.html" />
+    </div>
   </header>
+
+  <div
+    class="site-menu"
+    id="site-menu"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Menu"
+    hidden
+  >
+    <button type="button" class="site-menu__close" aria-label="Close menu">
+      <load
+        src="components/icon/icon.html"
+        src-url="./images/icons/close-mobile.svg"
+        label=""
+      />
+    </button>
+    <nav class="site-menu__nav" aria-label="Main navigation">
+      <a class="site-nav__link" href="#/" data-route="/">Home</a>
+      <a class="site-nav__link" href="#/favorites" data-route="/favorites"
+        >Favorites</a
+      >
+    </nav>
+    <div class="site-menu__socials">
+      <load src="components/social-links/social-links.html" />
+    </div>
+  </div>
+  <button
+    type="button"
+    class="site-menu__backdrop"
+    aria-label="Close menu"
+    hidden
+  ></button>
+
   <main class="page-content">
     <load src="pages/home-page/home-page.html" />
     <load src="pages/favorites-page/favorites-page.html" />
   </main>
 </div>
+<load src="components/exercise-modal/exercise-modal.html" />
+<load src="components/scroll-up/scroll-up.html" />
+<load src="components/loader/loader.html" />

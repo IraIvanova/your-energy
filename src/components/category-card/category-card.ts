@@ -1,25 +1,29 @@
-import type { Category } from '../../services/catalog';
+// Task 05 — Category card (owner: IraIvanova).
+import type { Filter } from '../../services/types';
+import { buildCategoryHash } from '../../services/routes';
 
-export function renderCategoryCard(
+export function createCategoryCard(
   template: HTMLTemplateElement,
-  category: Category,
-  onSelect: (name: string) => void
-) {
-  const fragment = template.content.cloneNode(true) as DocumentFragment;
-  const image = fragment.querySelector('img');
-  const name = fragment.querySelector('.category-card__name');
-  const filter = fragment.querySelector('.category-card__filter');
-  const link = fragment.querySelector('a');
+  filter: Filter
+): HTMLElement {
+  const card = template.content.firstElementChild?.cloneNode(
+    true
+  ) as HTMLAnchorElement | null;
+  if (!card) throw new Error('Category card template is missing.');
 
-  if (!image || !name || !filter || !link) return;
+  const name = card.querySelector<HTMLElement>('.category-card__name');
+  const filterName = card.querySelector<HTMLElement>('.category-card__filter');
+  const image = card.querySelector<HTMLImageElement>('.category-card__image');
+  if (!name || !filterName || !image) {
+    throw new Error('Category card template is incomplete.');
+  }
 
-  image.src = category.imgURL;
-  name.textContent = category.name;
-  filter.textContent = category.filter;
-  link.addEventListener('click', event => {
-    event.preventDefault();
-    onSelect(category.name);
-  });
-
-  return fragment;
+  card.dataset.categoryName = filter.name;
+  card.dataset.categoryType = filter.filter;
+  card.href = buildCategoryHash(filter.filter, filter.name);
+  image.src = filter.imgURL;
+  image.alt = '';
+  name.textContent = filter.name;
+  filterName.textContent = filter.filter;
+  return card;
 }

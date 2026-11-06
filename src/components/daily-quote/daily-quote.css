@@ -1,0 +1,77 @@
+.daily-quote {
+  position: relative;
+  display: flex;
+  min-height: 206px;
+  flex-direction: column;
+  padding: var(--space-5);
+  border-radius: var(--radius-surface);
+  color: var(--color-canvas);
+  background: var(--color-ink);
+}
+
+.daily-quote__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-right: var(--space-8);
+}
+
+.daily-quote__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 32px;
+}
+
+.daily-quote__icon img {
+  width: 34px;
+  height: 32px;
+}
+
+.daily-quote__title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-lead);
+  font-weight: var(--font-weight-medium);
+}
+
+.daily-quote__marks {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-5);
+  display: inline-flex;
+}
+
+.daily-quote__marks img {
+  width: 24px;
+  height: 24px;
+}
+
+.daily-quote__content {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  margin-left: calc(34px + var(--space-3));
+}
+
+.daily-quote__text {
+  margin: 0;
+  color: var(--color-inverse-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+}
+
+.daily-quote__author {
+  display: block;
+  margin-top: auto;
+  font-size: var(--font-size-sm);
+  font-style: normal;
+}
+
+.daily-quote__error {
+  margin: 0;
+  color: var(--color-inverse-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+}

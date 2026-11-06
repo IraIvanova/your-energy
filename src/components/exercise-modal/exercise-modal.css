@@ -1,0 +1,39 @@
+.exercise-modal {
+  width: min(420px, calc(100% - 32px));
+  padding: var(--space-8);
+  border: 0;
+  border-radius: var(--radius-surface);
+  color: var(--color-ink);
+  background: var(--color-surface);
+  text-align: center;
+}
+
+.exercise-modal::backdrop {
+  background: var(--color-overlay);
+}
+
+.exercise-modal__close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.exercise-modal__close img {
+  width: 20px;
+  height: 20px;
+}
+
+.exercise-modal__title {
+  margin: 0 0 var(--space-6);
+  font-size: var(--font-size-lead);
+  font-weight: var(--font-weight-medium);
+}
+
+.exercise-modal__favorite {
+  width: 100%;
+}

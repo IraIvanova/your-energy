@@ -1,0 +1,29 @@
+/* Task 06 — Exercise list (owner: yuliialiubenka) */
+
+.exercise-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--grid-gap) var(--space-4);
+}
+
+.exercise-list__grid {
+  max-width: none;
+  margin-top: 0;
+}
+
+.exercise-list .ui-heading {
+  margin-block: var(--space-8) var(--space-5);
+  text-transform: capitalize;
+}
+
+.exercise-list__empty {
+  margin: var(--space-10) 0;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .exercise-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

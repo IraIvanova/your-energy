@@ -16,7 +16,8 @@ test('production HTML contains the shell and both pages before JavaScript runs',
   assert.ok(html && html.type === 'asset');
   const source = String(html.source);
   assert.match(source, /<header class="site-header">/);
-  assert.match(source, /Find your next activity\./);
+  assert.match(source, /Stay healthy/);
+  assert.match(source, /110 min/);
   assert.match(source, /Favorites\./);
   assert.match(source, /data-page="\/favorites"\s+hidden/);
   assert.match(source, /\/your-energy\/favicon\.svg/);

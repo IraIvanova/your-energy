@@ -1,0 +1,60 @@
+<!-- Task 10 — Footer and email subscription (owner: MLazoryk) -->
+<footer class="footer ui-theme--dark">
+  <div class="footer__container">
+    <div class="footer__brand">
+      <a class="footer__logo" href="#/" aria-label="Your Energy home">
+        <load
+          src="components/icon/icon.html"
+          src-url="./images/icons/logo-light.svg"
+          label=""
+        />
+      </a>
+      <load src="components/social-links/social-links.html" />
+    </div>
+
+    <div class="footer__content">
+      <p class="footer__slogan">
+        Transforming your <em>body shape</em> with us
+      </p>
+
+      <div class="footer__subscribe">
+        <p class="footer__subscribe-text">
+          Subscribe and learn about new exercises!
+        </p>
+        <form class="footer__form" id="footer-subscription-form" novalidate>
+          <label class="visually-hidden" for="footer-email">Email</label>
+          <input
+            class="footer__input"
+            type="email"
+            id="footer-email"
+            name="email"
+            placeholder="Email"
+            required
+            pattern="^\w+(\.\w+)?@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$"
+            title="Enter a valid email, e.g. name@mail.com"
+            autocomplete="email"
+          />
+          <button class="footer__submit" type="submit">Send</button>
+        </form>
+        <p
+          class="footer__message"
+          id="footer-subscription-message"
+          role="status"
+          aria-live="polite"
+        ></p>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__text">Your Energy. All rights reserved.</p>
+      <div class="footer__bottom-links">
+        <p class="footer__text footer__legal">
+          <a class="footer__legal-link" href="#">Privacy Policy</a>
+          <span aria-hidden="true">/</span>
+          <a class="footer__legal-link" href="#">Terms of Service</a>
+        </p>
+        <p class="footer__text">&copy;2023</p>
+      </div>
+    </div>
+  </div>
+</footer>

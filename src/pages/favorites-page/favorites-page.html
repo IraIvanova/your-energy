@@ -1,12 +1,59 @@
 <section
-  class="page-intro favorites-page"
+  class="favorites-page"
   aria-labelledby="favorites-title"
   data-page="/favorites"
   hidden
 >
-  <p class="page-intro__eyebrow">Your shortlist</p>
-  <h1 class="page-intro__title" id="favorites-title">Favorites.</h1>
-  <p class="page-intro__description">
-    Save activities you love and they will be collected here.
-  </p>
+  <h1
+    class="favorites-page__title"
+    id="favorites-title"
+    data-title="Favorites."
+  >
+    Favorites
+  </h1>
+  <div class="favorites-page__layout">
+    <aside class="favorites-page__sidebar">
+      <load src="components/daily-quote/daily-quote.html" />
+      <div class="favorites-page__sidebar-bottom">
+        <div class="favorites-page__norm">
+          <load
+            src="components/icon/icon.html"
+            src-url="./images/icons/dumbbell.svg"
+            label=""
+          />
+          <strong>110 min</strong>
+          <span>Daily norm of sports</span>
+        </div>
+        <div
+          class="favorites-page__photo"
+          role="img"
+          aria-label="People exercising"
+        ></div>
+      </div>
+    </aside>
+    <div class="favorites-scroll">
+      <div class="favorites-page__content">
+        <p class="favorites-page__empty" data-favorites-empty hidden>
+          It appears that you haven't added any exercises to your favorites yet.
+          To get started, add exercises you like from a category.
+        </p>
+        <p class="favorites-page__error" data-favorites-error hidden>
+          We couldn't load your favorites. Please try again later.
+        </p>
+        <div class="exercise-grid" data-favorites-list></div>
+        <template data-exercise-template>
+          <load
+            src="components/exercise-card/exercise-card.html"
+            id=""
+            title=""
+            rating=""
+            body-part=""
+            target=""
+            equipment=""
+            burned-calories=""
+          />
+        </template>
+      </div>
+    </div>
+  </div>
 </section>
