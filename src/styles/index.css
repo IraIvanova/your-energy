@@ -15,6 +15,7 @@
 @import '../components/exercise-modal/exercise-modal.css';
 @import '../pages/home-page/home-page.css';
 @import '../pages/favorites-page/favorites-page.css';
+@import '../components/footer/footer.css';
 
 :root {
   font-family: var(--font-family);

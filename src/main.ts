@@ -8,6 +8,7 @@ import { initSearchFields } from './components/search-field/search-field';
 import { initExerciseModal } from './components/exercise-modal/exercise-modal';
 import './pages/home-page/home-page';
 import './pages/favorites-page/favorites-page';
+import './components/footer/footer';
 
 initAppShell();
 initSearchFields();
