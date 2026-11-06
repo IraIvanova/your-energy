@@ -14,6 +14,8 @@ export interface CatalogState {
   keyword: string;
   filters: PaginationState;
   exercises: PaginationState;
+  filtersError: boolean;
+  exercisesError: boolean;
 }
 
 const initialState: CatalogState = {
@@ -30,6 +32,8 @@ const initialState: CatalogState = {
     limit: window.matchMedia('(max-width: 767px)').matches ? 8 : 10,
     totalPages: 0,
   },
+  filtersError: false,
+  exercisesError: false,
 };
 
 export function createCatalogRequests(
@@ -53,11 +57,15 @@ export function createCatalogRequests(
 
       if (requestId !== filtersRequestId) return;
 
+      state.filtersError = false;
       state.filters.totalPages = response.totalPages;
       state.filters.page = response.page;
       onFilters(response);
     } catch (error) {
-      if (requestId === filtersRequestId) onError(error, 'filters');
+      if (requestId === filtersRequestId) {
+        state.filtersError = true;
+        onError(error, 'filters');
+      }
     }
   }
 
@@ -77,11 +85,15 @@ export function createCatalogRequests(
 
       if (requestId !== exercisesRequestId) return;
 
+      state.exercisesError = false;
       state.exercises.totalPages = response.totalPages;
       state.exercises.page = response.page;
       onExercises(response);
     } catch (error) {
-      if (requestId === exercisesRequestId) onError(error, 'exercises');
+      if (requestId === exercisesRequestId) {
+        state.exercisesError = true;
+        onError(error, 'exercises');
+      }
     }
   }
 
