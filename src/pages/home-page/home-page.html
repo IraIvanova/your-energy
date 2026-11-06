@@ -1,4 +1,47 @@
-<div class="page-intro home-page" data-page="/">
+<div class="home-page" data-page="/">
+  <load src="components/hero/hero.html" />
+
+  <aside class="home-page__daily" aria-label="Daily motivation">
+    <div class="home-page__quote" data-quote-slot></div>
+
+    <picture class="home-page__photo">
+      <source
+        media="(min-width: 1200px)"
+        type="image/webp"
+        srcset="
+          ./images/photos/daily-desktop.webp    1x,
+          ./images/photos/daily-desktop-2x.webp 2x
+        "
+      />
+      <source
+        media="(min-width: 768px)"
+        type="image/webp"
+        srcset="
+          ./images/photos/daily-tablet.webp    1x,
+          ./images/photos/daily-tablet-2x.webp 2x
+        "
+      />
+      <source
+        type="image/webp"
+        srcset="
+          ./images/photos/daily-mobile.webp    1x,
+          ./images/photos/daily-mobile-2x.webp 2x
+        "
+      />
+      <img
+        class="home-page__photo-image"
+        src="./images/photos/daily-mobile.jpg"
+        alt="Two women with water bottles talking after a workout"
+        width="335"
+        height="242"
+        loading="lazy"
+        decoding="async"
+      />
+    </picture>
+
+    <load src="components/daily-norm/daily-norm.html" />
+  </aside>
+
   <section class="home-page__intro-section" aria-labelledby="home-title">
     <p class="page-intro__eyebrow">Move your way</p>
     <h1 class="page-intro__title" id="home-title">Find your next activity.</h1>

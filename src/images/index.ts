@@ -1,6 +1,20 @@
-import hero from './photos/hero.jpg';
-import heroDetail from './photos/hero-detail.jpg';
-import quotePhoto from './photos/quote.jpg';
+import heroMobile from './photos/hero-mobile.webp';
+import heroMobile2x from './photos/hero-mobile-2x.webp';
+import heroMobileJpg from './photos/hero-mobile.jpg';
+import heroTablet from './photos/hero-tablet.webp';
+import heroTablet2x from './photos/hero-tablet-2x.webp';
+import heroDesktop from './photos/hero-desktop.webp';
+import heroDesktop2x from './photos/hero-desktop-2x.webp';
+import heroDetailDesktop from './photos/hero-detail-desktop.webp';
+import heroDetailDesktop2x from './photos/hero-detail-desktop-2x.webp';
+import heroDetailDesktopJpg from './photos/hero-detail-desktop.jpg';
+import dailyMobile from './photos/daily-mobile.webp';
+import dailyMobile2x from './photos/daily-mobile-2x.webp';
+import dailyMobileJpg from './photos/daily-mobile.jpg';
+import dailyTablet from './photos/daily-tablet.webp';
+import dailyTablet2x from './photos/daily-tablet-2x.webp';
+import dailyDesktop from './photos/daily-desktop.webp';
+import dailyDesktop2x from './photos/daily-desktop-2x.webp';
 import favorites from './photos/favorites.jpg';
 import abductors from './photos/abductors.jpg';
 import abs from './photos/abs.jpg';
@@ -52,9 +66,23 @@ import scrollTop from './icons/scroll-top.svg';
 import scrollTopMobile from './icons/scroll-top-mobile.svg';
 
 export const images = {
-  hero,
-  heroDetail,
-  quote: quotePhoto,
+  heroMobile,
+  heroMobile2x,
+  heroMobileJpg,
+  heroTablet,
+  heroTablet2x,
+  heroDesktop,
+  heroDesktop2x,
+  heroDetailDesktop,
+  heroDetailDesktop2x,
+  heroDetailDesktopJpg,
+  dailyMobile,
+  dailyMobile2x,
+  dailyMobileJpg,
+  dailyTablet,
+  dailyTablet2x,
+  dailyDesktop,
+  dailyDesktop2x,
   favorites,
   abductors,
   abs,

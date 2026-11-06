@@ -1,0 +1,78 @@
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__content">
+    <h1 class="hero__title" id="hero-title">
+      <img
+        class="hero__sun"
+        src="./images/icons/sun.svg"
+        alt=""
+        width="59"
+        height="59"
+      />
+      Get <em class="hero__accent">Body</em> in shape, Stay healthy
+    </h1>
+    <p class="hero__text">
+      Transform your physique and embrace a healthier lifestyle with our
+      comprehensive fitness and nutrition support.
+    </p>
+  </div>
+
+  <picture class="hero__detail">
+    <source
+      type="image/webp"
+      srcset="
+        ./images/photos/hero-detail-desktop.webp    1x,
+        ./images/photos/hero-detail-desktop-2x.webp 2x
+      "
+    />
+    <img
+      class="hero__detail-image"
+      src="./images/photos/hero-detail-desktop.jpg"
+      alt="Two women balancing on one leg on yoga mats"
+      width="168"
+      height="100"
+      loading="lazy"
+      decoding="async"
+    />
+  </picture>
+
+  <ul class="hero__tags" aria-label="Popular tags">
+    <li class="hero__tag">#Sport</li>
+    <li class="hero__tag">#Healthy</li>
+    <li class="hero__tag">#Workout</li>
+    <li class="hero__tag">#Diet</li>
+  </ul>
+
+  <picture class="hero__picture">
+    <source
+      media="(min-width: 1200px)"
+      type="image/webp"
+      srcset="
+        ./images/photos/hero-desktop.webp    1x,
+        ./images/photos/hero-desktop-2x.webp 2x
+      "
+    />
+    <source
+      media="(min-width: 768px)"
+      type="image/webp"
+      srcset="
+        ./images/photos/hero-tablet.webp    1x,
+        ./images/photos/hero-tablet-2x.webp 2x
+      "
+    />
+    <source
+      type="image/webp"
+      srcset="
+        ./images/photos/hero-mobile.webp    1x,
+        ./images/photos/hero-mobile-2x.webp 2x
+      "
+    />
+    <img
+      class="hero__image"
+      src="./images/photos/hero-mobile.jpg"
+      alt="Two women in a plank giving each other a high five by the lake"
+      width="335"
+      height="460"
+      fetchpriority="high"
+    />
+  </picture>
+</section>
