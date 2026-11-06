@@ -1,20 +1,12 @@
-import type {
-  Exercise,
-  ExercisesResponse,
-  Filter,
-  FiltersResponse,
-  Quote,
-} from './types';
+// Shared HTTP core (owner: yuliialiubenka, integration).
+// Endpoints live in their own files so tasks don't edit the same module:
+//   quote-api.ts         01 daily quote
+//   filters-api.ts       05 categories / 07 pagination
+//   exercises-api.ts     06 exercises, 08 modal (+ rating), 09 favorites
+//   subscription-api.ts  10 footer subscription
+// Data shapes are in types.ts.
 
-export type {
-  Exercise,
-  ExercisesResponse,
-  Filter,
-  FiltersResponse,
-  Quote,
-} from './types';
-
-const API_BASE_URL = 'https://your-energy.b.goit.study/api';
+export const API_BASE_URL = 'https://your-energy.b.goit.study/api';
 
 export class ApiError extends Error {
   status: number;
@@ -26,10 +18,35 @@ export class ApiError extends Error {
   }
 }
 
+type PendingListener = (pending: number) => void;
+
+let pendingRequests = 0;
+const pendingListeners = new Set<PendingListener>();
+
+/** Reports the number of in-flight API requests (used by the loader). */
+export function onPendingRequestsChange(listener: PendingListener): void {
+  pendingListeners.add(listener);
+  listener(pendingRequests);
+}
+
+function setPendingRequests(delta: number): void {
+  pendingRequests += delta;
+  for (const listener of pendingListeners) listener(pendingRequests);
+}
+
 export async function fetchJson<T>(
   url: string,
   options?: RequestInit
 ): Promise<T> {
+  setPendingRequests(1);
+  try {
+    return await request<T>(url, options);
+  } finally {
+    setPendingRequests(-1);
+  }
+}
+
+async function request<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(url, options);
 
   if (!response.ok) {
@@ -54,14 +71,9 @@ export async function fetchJson<T>(
   return (await response.json()) as T;
 }
 
-export type FilterName = Filter['filter'];
-export type ExerciseFilter = 'muscles' | 'bodypart' | 'equipment';
-export type FilterExercise = Filter;
-export type FilterResponse = FiltersResponse;
-
 // The API returns `page` (and sometimes `totalPages`) as strings,
 // so "1" + 1 would give "11". Normalize them to numbers once here.
-function normalizePage<
+export function normalizePage<
   T extends { page: number | string; totalPages: number | string },
 >(response: T): T {
   return {
@@ -69,95 +81,4 @@ function normalizePage<
     page: Number(response.page) || 1,
     totalPages: Number(response.totalPages) || 0,
   };
-}
-
-export function getExercises(page = 1, limit = 9): Promise<ExercisesResponse> {
-  return fetchJson<ExercisesResponse>(
-    `${API_BASE_URL}/exercises?page=${page}&limit=${limit}`
-  ).then(normalizePage);
-}
-
-export function getFilters(page = 1, limit = 12): Promise<FiltersResponse> {
-  return fetchJson<FiltersResponse>(
-    `${API_BASE_URL}/filters?page=${page}&limit=${limit}`
-  ).then(normalizePage);
-}
-
-export function getFiltersOfExercises(
-  filter: FilterName,
-  page: number,
-  limit: number
-): Promise<FilterResponse> {
-  return getFiltersByType(filter, page, limit);
-}
-
-function getFiltersByType(
-  filter: FilterName,
-  page: number,
-  limit: number
-): Promise<FilterResponse> {
-  return fetchJson<FilterResponse>(
-    `${API_BASE_URL}/filters?filter=${encodeURIComponent(
-      filter
-    )}&page=${page}&limit=${limit}`
-  ).then(normalizePage);
-}
-
-export function getExercisesByFilter(
-  filterType: FilterName | ExerciseFilter,
-  filterName: string,
-  page = 1,
-  limit = 9,
-  keyword = ''
-): Promise<ExercisesResponse> {
-  const parameter =
-    filterType === 'Body parts'
-      ? 'bodypart'
-      : filterType === 'Equipment'
-        ? 'equipment'
-        : filterType === 'Muscles'
-          ? 'muscles'
-          : filterType;
-  const query = new URLSearchParams({
-    [parameter]: filterName,
-    page: String(page),
-    limit: String(limit),
-  });
-  if (keyword.trim()) query.set('keyword', keyword.trim());
-
-  return fetchJson<ExercisesResponse>(
-    `${API_BASE_URL}/exercises?${query}`
-  ).then(normalizePage);
-}
-
-export async function getAllFilters(): Promise<Filter[]> {
-  const firstPage = await getFilters();
-  const remainingPages = await Promise.all(
-    Array.from({ length: Math.max(firstPage.totalPages - 1, 0) }, (_, index) =>
-      getFilters(index + 2)
-    )
-  );
-  return [firstPage, ...remainingPages].flatMap(page => page.results);
-}
-
-export function getQuote(): Promise<Quote> {
-  return fetchJson<Quote>(`${API_BASE_URL}/quote`);
-}
-
-export function getExerciseById(id: string): Promise<Exercise> {
-  return fetchJson<Exercise>(
-    `${API_BASE_URL}/exercises/${encodeURIComponent(id)}`
-  );
-}
-
-export function subscribe(email: string): Promise<{ message?: string }> {
-  return fetchJson<{ message?: string }>(`${API_BASE_URL}/subscription`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email }),
-  });
-}
-
-export function getExercisesByIds(ids: string[]): Promise<Exercise[]> {
-  return Promise.all(ids.map(id => getExerciseById(id)));
 }

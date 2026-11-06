@@ -1,4 +1,4 @@
-import { getExercisesByIds } from '../../services/api';
+import { getExercisesByIds } from '../../services/exercises-api';
 import { createExerciseCard } from '../../components/exercise-card/exercise-card';
 import { readFavoriteIds, removeFavoriteId } from '../../services/favorites';
 

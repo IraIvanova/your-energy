@@ -1,4 +1,4 @@
-import { getQuote } from '../../services/api';
+import { getQuote } from '../../services/quote-api';
 
 const DAILY_QUOTE_STORAGE_KEY = 'your-energy-daily-quote';
 const QUOTE_ERROR_MESSAGE = 'Unable to load the quote. Please try again later.';

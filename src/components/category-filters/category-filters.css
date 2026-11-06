@@ -1,0 +1,28 @@
+/* Task 05 — Category filters (owner: IraIvanova) */
+
+.category-filters {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+}
+
+.category-filters button {
+  padding: 0 0 var(--space-2);
+  border: 0;
+  border-bottom: 3px solid transparent;
+  color: var(--color-muted);
+  background: transparent;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.category-filters button.is-active {
+  border-bottom-color: var(--color-ink);
+  color: var(--color-ink);
+}
+
+@media (min-width: 768px) {
+  .category-filters {
+    height: var(--control-height);
+  }
+}

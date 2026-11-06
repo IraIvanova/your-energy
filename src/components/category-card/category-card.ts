@@ -1,27 +1,6 @@
+// Task 05 — Category card (owner: IraIvanova).
 import type { Filter } from '../../services/types';
-
-export function toUrlSlug(value: string): string {
-  return value
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
-/**
- * The category name goes into the URL as-is (encoded) so the exercises
- * request can be rebuilt from the hash alone, without the category list.
- */
-export function buildCategoryHash(
-  filterType: Filter['filter'],
-  category: string,
-  keyword = ''
-): string {
-  const query = keyword ? `?${new URLSearchParams({ keyword })}` : '';
-  return `#/category/${toUrlSlug(filterType)}/${encodeURIComponent(
-    category
-  )}${query}`;
-}
+import { buildCategoryHash } from '../../services/routes';
 
 export function createCategoryCard(
   template: HTMLTemplateElement,

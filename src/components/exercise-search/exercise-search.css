@@ -1,0 +1,44 @@
+/* Task 06 — Exercise search (owner: yuliialiubenka) */
+
+.exercise-search {
+  width: 100%;
+}
+
+/* White pill as in the reference: border shows on hover and focus. */
+.exercise-search .ui-search {
+  border-color: transparent;
+  background: var(--color-surface);
+  transition: border-color var(--motion-duration) var(--motion-easing);
+}
+
+.exercise-search .ui-search:hover,
+.exercise-search .ui-search:focus-within {
+  border-color: var(--color-ink);
+}
+
+.exercise-search .ui-search:focus-within {
+  outline: none;
+}
+
+.exercise-search .ui-search__input::placeholder {
+  color: var(--color-ink);
+}
+
+@media (min-width: 768px) {
+  .exercise-search {
+    width: 273px;
+  }
+}
+
+@media (min-width: 768px) {
+  .exercise-search,
+  .exercise-search .ui-search {
+    height: var(--control-height);
+  }
+}
+
+@media (min-width: 1440px) {
+  .exercise-search {
+    margin-left: 0;
+  }
+}

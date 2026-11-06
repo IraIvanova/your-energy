@@ -1,4 +1,5 @@
-import { ApiError, subscribe } from '../../services/api';
+import { ApiError } from '../../services/api';
+import { subscribe } from '../../services/subscription-api';
 
 const form = document.getElementById(
   'footer-subscription-form'

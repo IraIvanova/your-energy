@@ -10,8 +10,12 @@ import { initDailyQuotes } from './components/daily-quote/daily-quote';
 import './pages/home-page/home-page';
 import './pages/favorites-page/favorites-page';
 import './components/footer/footer';
+import { initLoader } from './components/loader/loader';
+import { initScrollUp } from './components/scroll-up/scroll-up';
 
 initAppShell();
 initSearchFields();
 initExerciseModal();
 initDailyQuotes();
+initLoader();
+initScrollUp();

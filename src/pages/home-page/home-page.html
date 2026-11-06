@@ -16,33 +16,21 @@
         </h2>
         <load src="components/breadcrumbs/breadcrumbs.html" />
       </div>
-      <form class="home-page__search" data-home-search hidden>
-        <load
-          src="components/search-field/search-field.html"
-          id="exercise-search"
-          label="Search exercises"
-          placeholder="Search"
-        />
-      </form>
-      <nav
-        class="home-page__filter-nav"
-        aria-label="Exercise filters"
-        data-home-filter-nav
-      >
-        <button type="button" data-filter-type="Muscles">Muscles</button>
-        <button type="button" data-filter-type="Body parts">Body parts</button>
-        <button type="button" data-filter-type="Equipment">Equipment</button>
-      </nav>
+      <!-- 06: exercise search -->
+      <load src="components/exercise-search/exercise-search.html" />
+      <!-- 05: category filters -->
+      <load src="components/category-filters/category-filters.html" />
     </div>
     <div class="home-page__exercises-layout">
       <aside class="home-page__daily" aria-label="Daily motivation">
+        <!-- 01: daily quote -->
         <div class="home-page__quote" data-quote-slot>
           <load src="components/daily-quote/daily-quote.html" />
         </div>
 
         <picture class="home-page__photo">
           <source
-            media="(min-width: 1200px)"
+            media="(min-width: 1440px)"
             type="image/webp"
             srcset="
               ./images/photos/daily-desktop.webp    1x,
@@ -50,7 +38,7 @@
             "
           />
           <source
-            media="(min-width: 640px)"
+            media="(min-width: 768px)"
             type="image/webp"
             srcset="
               ./images/photos/daily-tablet.webp    1x,
@@ -78,6 +66,7 @@
           />
         </picture>
 
+        <!-- 04: 110 min block -->
         <load src="components/daily-norm/daily-norm.html" />
       </aside>
       <div class="home-page__catalog">
@@ -89,63 +78,28 @@
             Try again
           </button>
         </div>
-        <div class="home-page__categories" data-home-categories></div>
-        <p class="home-page__empty" data-home-categories-empty hidden>
-          Unfortunately, no results were found. You may want to consider other
-          search options to find the exercise you are looking for. Our range is
-          wide and you have the opportunity to find more options that suit your
-          needs.
-        </p>
+        <!-- 05: category list -->
+        <load src="components/category-list/category-list.html" />
+        <!-- 07: categories pagination -->
         <nav
-          class="home-page__pagination pagination"
+          class="pagination"
           aria-label="Categories pagination"
           data-home-filters-pagination
           hidden
         ></nav>
-        <div class="home-page__exercises" data-home-exercises hidden>
-          <h2 class="ui-heading visually-hidden" data-home-category-title></h2>
-          <p class="home-page__empty" data-home-empty hidden>
-            Unfortunately, no results were found. You may want to consider other
-            search options to find the exercise you are looking for. Our range
-            is wide and you have the opportunity to find more options that suit
-            your needs.
-          </p>
-          <div class="exercise-grid home-page__list" data-home-list></div>
-          <nav
-            class="home-page__pagination pagination"
-            aria-label="Exercises pagination"
-            data-home-exercises-pagination
-            hidden
-          ></nav>
-        </div>
+        <!-- 06: exercise list -->
+        <load src="components/exercise-list/exercise-list.html" />
+        <!-- 07: exercises pagination -->
+        <nav
+          class="pagination"
+          aria-label="Exercises pagination"
+          data-home-exercises-pagination
+          hidden
+        ></nav>
       </div>
     </div>
   </section>
 
-  <load src="components/category-card/category-card.html" />
-  <template data-home-template>
-    <load
-      src="components/exercise-card/exercise-card.html"
-      id=""
-      title=""
-      rating=""
-      body-part=""
-      target=""
-      equipment=""
-      burned-calories=""
-    />
-  </template>
-  <template data-pagination-page-template>
-    <button type="button" class="home-page__pagination-page"></button>
-  </template>
-  <template data-pagination-arrow-template>
-    <button type="button" data-pagination-arrow>
-      <span class="home-page__pagination-arrow-icon">
-        <img alt="" />
-      </span>
-    </button>
-  </template>
-  <template data-pagination-ellipsis-template>
-    <span class="home-page__pagination-ellipsis">...</span>
-  </template>
+  <!-- 07: pagination templates -->
+  <load src="components/pagination/pagination.html" />
 </div>

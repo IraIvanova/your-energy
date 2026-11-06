@@ -1,11 +1,6 @@
-import {
-  getExercisesByFilter,
-  getFiltersOfExercises,
-  type ExerciseFilter,
-  type ExercisesResponse,
-  type FilterName,
-  type FilterResponse,
-} from './api';
+import { getExercisesByFilter } from './exercises-api';
+import { getFiltersOfExercises, type FilterName } from './filters-api';
+import type { ExercisesResponse, FiltersResponse } from './types';
 
 export interface PaginationState {
   page: number;
@@ -38,7 +33,7 @@ const initialState: CatalogState = {
 };
 
 export function createCatalogRequests(
-  onFilters: (response: FilterResponse) => void,
+  onFilters: (response: FiltersResponse) => void,
   onExercises: (response: ExercisesResponse) => void,
   onError: (error: unknown, source: 'filters' | 'exercises') => void
 ) {
@@ -73,7 +68,7 @@ export function createCatalogRequests(
 
     try {
       const response = await getExercisesByFilter(
-        toExerciseFilter(state.filter),
+        state.filter,
         state.category,
         state.exercises.page,
         state.exercises.limit,
@@ -143,15 +138,4 @@ export function createCatalogRequests(
     changeFiltersPage,
     changeExercisesPage,
   };
-}
-
-function toExerciseFilter(filter: FilterName): ExerciseFilter {
-  switch (filter) {
-    case 'Body parts':
-      return 'bodypart';
-    case 'Muscles':
-      return 'muscles';
-    case 'Equipment':
-      return 'equipment';
-  }
 }

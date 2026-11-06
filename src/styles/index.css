@@ -16,6 +16,13 @@
 @import '../pages/home-page/home-page.css';
 @import '../pages/favorites-page/favorites-page.css';
 @import '../components/footer/footer.css';
+@import '../components/category-filters/category-filters.css';
+@import '../components/category-list/category-list.css';
+@import '../components/exercise-search/exercise-search.css';
+@import '../components/exercise-list/exercise-list.css';
+@import '../components/pagination/pagination.css';
+@import '../components/loader/loader.css';
+@import '../components/scroll-up/scroll-up.css';
 
 :root {
   font-family: var(--font-family);
