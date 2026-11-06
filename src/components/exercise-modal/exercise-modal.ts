@@ -1,6 +1,13 @@
+// Task 08 — Exercise details modal (owner: see README "Task ownership").
+// Current state: minimal placeholder that only toggles favorites.
+// TODO (TZ): gif, name, rating, target, body part, equipment, popularity,
+// burned calories per 3 min, description, Add/Remove favorites button.
+// Close on backdrop click, close button and Escape; remove listeners on close.
+// Data: getExerciseById(id) from services/api.ts.
+// Optional "Give a rating": patchExerciseRating() from services/api.ts.
 import {
   addFavoriteId,
-  readFavoriteIds,
+  isFavoriteId,
   removeFavoriteId,
 } from '../../services/favorites';
 
@@ -38,7 +45,7 @@ export function initExerciseModal(): void {
   });
   favoriteButton.addEventListener('click', () => {
     if (!currentExerciseId) return;
-    const isFavorite = readFavoriteIds().includes(currentExerciseId);
+    const isFavorite = isFavoriteId(currentExerciseId);
     if (isFavorite) {
       removeFavoriteId(currentExerciseId);
       favoriteButton.textContent = 'Add to favorites';
@@ -57,7 +64,7 @@ export function initExerciseModal(): void {
       throw new Error('Exercise modal title is missing.');
     }
     title.textContent = 'Save this exercise to your favorites?';
-    const isFavorite = readFavoriteIds().includes(id);
+    const isFavorite = isFavoriteId(id);
     favoriteButton.textContent = isFavorite
       ? 'Remove from favorites'
       : 'Add to favorites';
