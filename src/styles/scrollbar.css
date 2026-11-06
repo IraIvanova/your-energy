@@ -28,3 +28,36 @@
 .custom-scrollbar__thumb:active {
   cursor: grabbing;
 }
+
+/* Main page scrollbar */
+html {
+  scrollbar-color: var(--color-ink) var(--color-canvas);
+  scrollbar-width: thin;
+}
+
+html::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+
+html::-webkit-scrollbar-track {
+  background: var(--color-canvas);
+}
+
+html::-webkit-scrollbar-thumb {
+  border-radius: var(--scrollbar-radius);
+  background: var(--color-ink);
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
+}
+
+/* Chromium 121+ applies scrollbar-color and then ignores the
+   ::-webkit-scrollbar rules above; keep the 8px rounded version there. */
+@supports selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-color: auto;
+    scrollbar-width: auto;
+  }
+}
