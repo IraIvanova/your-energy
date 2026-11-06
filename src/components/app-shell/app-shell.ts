@@ -35,6 +35,10 @@ export function initAppShell(): void {
         .replace(/\/+$/, '') || '/';
     const route = path.toLowerCase() === '/favorites' ? '/favorites' : '/';
     document.body.classList.toggle('favorites-active', route === '/favorites');
+    document.documentElement.classList.toggle(
+      'favorites-active',
+      route === '/favorites'
+    );
 
     for (const page of pages) {
       page.hidden = page.dataset.page !== route;

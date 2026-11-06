@@ -47,8 +47,16 @@ export type ExerciseFilter = 'muscles' | 'bodypart' | 'equipment';
 export type FilterExercise = Filter;
 export type FilterResponse = FiltersResponse;
 
-function normalizePage<T extends { page: number | string }>(response: T): T {
-  return { ...response, page: Number(response.page) };
+// The API returns `page` (and sometimes `totalPages`) as strings,
+// so "1" + 1 would give "11". Normalize them to numbers once here.
+function normalizePage<
+  T extends { page: number | string; totalPages: number | string },
+>(response: T): T {
+  return {
+    ...response,
+    page: Number(response.page) || 1,
+    totalPages: Number(response.totalPages) || 0,
+  };
 }
 
 export function getExercises(page = 1, limit = 9): Promise<ExercisesResponse> {

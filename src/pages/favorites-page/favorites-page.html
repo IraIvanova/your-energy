@@ -13,28 +13,8 @@
   </h1>
   <div class="favorites-page__layout">
     <aside class="favorites-page__sidebar">
-      <div class="daily-quote" data-daily-quote>
-        <div class="daily-quote__header">
-          <span class="daily-quote__icon">
-            <load
-              src="components/icon/icon.html"
-              src-url="./images/icons/quote-runner.svg"
-              label=""
-            />
-          </span>
-          <h2 class="daily-quote__title">Quote of the day</h2>
-        </div>
-        <span class="daily-quote__marks">
-          <load
-            src="components/icon/icon.html"
-            src-url="./images/icons/quote.svg"
-            label=""
-          />
-        </span>
-        <div class="daily-quote__content">
-          <blockquote class="daily-quote__text" data-quote-text></blockquote>
-          <cite class="daily-quote__author" data-quote-author></cite>
-        </div>
+      <div data-daily-quote>
+        <load src="components/daily-quote/daily-quote.html" />
       </div>
       <div class="favorites-page__sidebar-bottom">
         <div class="favorites-page__norm">
@@ -57,7 +37,7 @@
       </p>
     </aside>
     <div class="favorites-scroll">
-      <div class="favorites-page__content custom-scrollbar">
+      <div class="favorites-page__content">
         <p class="favorites-page__empty" data-favorites-empty hidden>
           It appears that you haven't added any exercises to your favorites yet.
           To get started, add exercises you like from a category.
@@ -78,16 +58,6 @@
             burned-calories=""
           />
         </template>
-      </div>
-      <div
-        class="custom-scrollbar__track"
-        data-favorites-scrollbar
-        aria-hidden="true"
-      >
-        <div
-          class="custom-scrollbar__thumb"
-          data-favorites-scrollbar-thumb
-        ></div>
       </div>
     </div>
   </div>

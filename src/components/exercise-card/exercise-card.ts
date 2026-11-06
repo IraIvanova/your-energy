@@ -1,4 +1,5 @@
 import type { Exercise } from '../../services/types';
+import { icons } from '../../images';
 
 export function createExerciseCard(
   template: HTMLTemplateElement,
@@ -38,7 +39,7 @@ export function createExerciseCard(
 
   title.textContent = exercise.name;
   const detailValues = [
-    `${exercise.burnedCalories} / min`,
+    `${exercise.burnedCalories} / 3 min`,
     exercise.bodyPart,
     exercise.target,
   ];
@@ -51,7 +52,7 @@ export function createExerciseCard(
   });
   start.dataset.exerciseId = exercise._id;
   remove.hidden = !showRemove;
-  icon.src = './images/icons/trash.svg';
+  icon.src = icons.trash;
   rating.hidden = showRemove;
   ratingValue.textContent = String(exercise.rating ?? 0);
 

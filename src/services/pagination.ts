@@ -123,8 +123,18 @@ export function createCatalogRequests(
     void loadExercises();
   }
 
+  function cancelExercises(): void {
+    exercisesRequestId++;
+  }
+
+  function cancelFilters(): void {
+    filtersRequestId++;
+  }
+
   return {
     state,
+    cancelExercises,
+    cancelFilters,
     loadFilters,
     loadExercises,
     changeFilter,

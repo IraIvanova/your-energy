@@ -1,56 +1,6 @@
 <div class="home-page" data-page="/">
   <load src="components/hero/hero.html" />
 
-  <aside class="home-page__daily" aria-label="Daily motivation">
-    <div class="home-page__quote" data-quote-slot></div>
-
-    <picture class="home-page__photo">
-      <source
-        media="(min-width: 1200px)"
-        type="image/webp"
-        srcset="
-          ./images/photos/daily-desktop.webp    1x,
-          ./images/photos/daily-desktop-2x.webp 2x
-        "
-      />
-      <source
-        media="(min-width: 768px)"
-        type="image/webp"
-        srcset="
-          ./images/photos/daily-tablet.webp    1x,
-          ./images/photos/daily-tablet-2x.webp 2x
-        "
-      />
-      <source
-        type="image/webp"
-        srcset="
-          ./images/photos/daily-mobile.webp    1x,
-          ./images/photos/daily-mobile-2x.webp 2x
-        "
-      />
-      <img
-        class="home-page__photo-image"
-        src="./images/photos/daily-mobile.jpg"
-        alt="Two women with water bottles talking after a workout"
-        width="335"
-        height="242"
-        loading="lazy"
-        decoding="async"
-      />
-    </picture>
-
-    <load src="components/daily-norm/daily-norm.html" />
-  </aside>
-
-  <section class="home-page__intro-section" aria-labelledby="home-title">
-    <p class="page-intro__eyebrow">Move your way</p>
-    <h1 class="page-intro__title" id="home-title">Find your next activity.</h1>
-    <p class="page-intro__description">
-      A little inspiration can make a big difference. Your activity catalog will
-      appear here.
-    </p>
-  </section>
-
   <section
     class="home-page__exercises-section"
     aria-labelledby="exercises-title"
@@ -58,7 +8,7 @@
     <div class="home-page__catalog-header">
       <div class="home-page__catalog-heading">
         <h2
-          class="home-page__catalog-title visually-hidden"
+          class="home-page__catalog-title"
           id="exercises-title"
           data-exercises-title
         >
@@ -85,28 +35,81 @@
       </nav>
     </div>
     <div class="home-page__exercises-layout">
-      <aside class="home-page__quote-slot" aria-hidden="true"></aside>
+      <aside class="home-page__daily" aria-label="Daily motivation">
+        <div class="home-page__quote" data-quote-slot>
+          <load src="components/daily-quote/daily-quote.html" />
+          <p class="home-page__quote-error" data-home-quote-error hidden>
+            We couldn't load today's quote.
+          </p>
+        </div>
+
+        <picture class="home-page__photo">
+          <source
+            media="(min-width: 1200px)"
+            type="image/webp"
+            srcset="
+              ./images/photos/daily-desktop.webp    1x,
+              ./images/photos/daily-desktop-2x.webp 2x
+            "
+          />
+          <source
+            media="(min-width: 640px)"
+            type="image/webp"
+            srcset="
+              ./images/photos/daily-tablet.webp    1x,
+              ./images/photos/daily-tablet-2x.webp 2x
+            "
+          />
+          <source
+            type="image/webp"
+            srcset="
+              ./images/photos/daily-mobile.webp    1x,
+              ./images/photos/daily-mobile-2x.webp 2x
+            "
+          />
+          <img
+            class="home-page__photo-image"
+            src="./images/photos/daily-mobile.jpg"
+            alt="Two women with water bottles talking after a workout"
+            width="335"
+            height="242"
+            sizes="(min-width: 1200px) 444px, 100vw"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+
+        <load src="components/daily-norm/daily-norm.html" />
+      </aside>
       <div class="home-page__catalog">
         <p class="home-page__error" data-home-error hidden>
           We couldn't load categories. Please try again later.
         </p>
         <div class="home-page__categories" data-home-categories></div>
+        <nav
+          class="home-page__pagination pagination"
+          aria-label="Categories pagination"
+          data-home-filters-pagination
+          hidden
+        ></nav>
         <div class="home-page__exercises" data-home-exercises hidden>
           <h2 class="ui-heading visually-hidden" data-home-category-title></h2>
           <p class="home-page__empty" data-home-empty hidden>
             No exercises found. Try another search.
           </p>
           <div class="exercise-grid home-page__list" data-home-list></div>
+          <nav
+            class="home-page__pagination pagination"
+            aria-label="Exercises pagination"
+            data-home-exercises-pagination
+            hidden
+          ></nav>
         </div>
       </div>
     </div>
   </section>
 
-  <template data-category-template>
-    <a class="home-page__category" href="#">
-      <span class="home-page__category-name"></span>
-    </a>
-  </template>
+  <load src="components/category-card/category-card.html" />
   <template data-home-template>
     <load
       src="components/exercise-card/exercise-card.html"
@@ -118,5 +121,18 @@
       equipment=""
       burned-calories=""
     />
+  </template>
+  <template data-pagination-page-template>
+    <button type="button" class="home-page__pagination-page"></button>
+  </template>
+  <template data-pagination-arrow-template>
+    <button type="button" data-pagination-arrow>
+      <span class="home-page__pagination-arrow-icon">
+        <img alt="" />
+      </span>
+    </button>
+  </template>
+  <template data-pagination-ellipsis-template>
+    <span class="home-page__pagination-ellipsis">...</span>
   </template>
 </div>

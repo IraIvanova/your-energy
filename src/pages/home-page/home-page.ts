@@ -1,43 +1,51 @@
-import { getAllFilters, getExercisesByFilter } from '../../services/api';
+import { getAllFilters, getQuote } from '../../services/api';
+import { createCatalogRequests } from '../../services/pagination';
 import type { Filter } from '../../services/types';
+import { icons } from '../../images';
+import { createCategoryCard } from '../../components/category-card/category-card';
 import { createExerciseCard } from '../../components/exercise-card/exercise-card';
 
 async function initHomePage(): Promise<void> {
-  const categories = document.querySelector<HTMLElement>(
-    '[data-home-categories]'
-  );
-  const exercises = document.querySelector<HTMLElement>(
-    '[data-home-exercises]'
-  );
-  const list = document.querySelector<HTMLElement>('[data-home-list]');
-  const categoryTitle = document.querySelector<HTMLElement>(
+  const root = document.querySelector<HTMLElement>('[data-page="/"]');
+  if (!root) throw new Error('Home page is missing.');
+  const categories = root.querySelector<HTMLElement>('[data-home-categories]');
+  const exercises = root.querySelector<HTMLElement>('[data-home-exercises]');
+  const list = root.querySelector<HTMLElement>('[data-home-list]');
+  const categoryTitle = root.querySelector<HTMLElement>(
     '[data-home-category-title]'
   );
-  const catalogTitle = document.querySelector<HTMLElement>(
+  const catalogTitle = root.querySelector<HTMLElement>(
     '[data-exercises-title]'
   );
-  const back = document.querySelector<HTMLAnchorElement>(
-    '[data-breadcrumb-home]'
-  );
-  const breadcrumbs = document.querySelector<HTMLElement>('[data-breadcrumbs]');
-  const breadcrumbCurrent = document.querySelector<HTMLElement>(
+  const back = root.querySelector<HTMLAnchorElement>('[data-breadcrumb-home]');
+  const breadcrumbs = root.querySelector<HTMLElement>('[data-breadcrumbs]');
+  const breadcrumbCurrent = root.querySelector<HTMLElement>(
     '[data-breadcrumb-current]'
   );
-  const search = document.querySelector<HTMLFormElement>('[data-home-search]');
-  const searchInput = document.querySelector<HTMLInputElement>(
+  const search = root.querySelector<HTMLFormElement>('[data-home-search]');
+  const searchInput = root.querySelector<HTMLInputElement>(
     '[data-home-search] [data-search-input]'
   );
-  const empty = document.querySelector<HTMLElement>('[data-home-empty]');
-  const filterNav = document.querySelector<HTMLElement>(
-    '[data-home-filter-nav]'
-  );
-  const categoryTemplate = document.querySelector<HTMLTemplateElement>(
+  const empty = root.querySelector<HTMLElement>('[data-home-empty]');
+  const filterNav = root.querySelector<HTMLElement>('[data-home-filter-nav]');
+  const categoryTemplate = root.querySelector<HTMLTemplateElement>(
     '[data-category-template]'
   );
-  const template = document.querySelector<HTMLTemplateElement>(
+  const template = root.querySelector<HTMLTemplateElement>(
     '[data-home-template]'
   );
-  const error = document.querySelector<HTMLElement>('[data-home-error]');
+  const error = root.querySelector<HTMLElement>('[data-home-error]');
+  const filtersPagination = root.querySelector<HTMLElement>(
+    '[data-home-filters-pagination]'
+  );
+  const exercisesPagination = root.querySelector<HTMLElement>(
+    '[data-home-exercises-pagination]'
+  );
+  const quoteText = root.querySelector<HTMLElement>('[data-home-quote-text]');
+  const quoteAuthor = root.querySelector<HTMLElement>(
+    '[data-home-quote-author]'
+  );
+  const quoteError = root.querySelector<HTMLElement>('[data-home-quote-error]');
   if (
     !categories ||
     !exercises ||
@@ -53,7 +61,12 @@ async function initHomePage(): Promise<void> {
     !filterNav ||
     !categoryTemplate ||
     !template ||
-    !error
+    !error ||
+    !quoteText ||
+    !quoteAuthor ||
+    !quoteError ||
+    !filtersPagination ||
+    !exercisesPagination
   ) {
     throw new Error('Home page is missing its exercise catalog.');
   }
@@ -71,17 +84,65 @@ async function initHomePage(): Promise<void> {
   const searchInputElement = searchInput;
   const emptyElement = empty;
   const filterNavElement = filterNav;
+  const errorElement = error;
+  const quoteTextElement = quoteText;
+  const quoteAuthorElement = quoteAuthor;
+  const quoteErrorElement = quoteError;
+  const filtersPaginationElement = filtersPagination;
+  const exercisesPaginationElement = exercisesPagination;
+  let activeFilter: Filter['filter'] = 'Muscles';
+  let allFilters: Filter[] = [];
+  let filtersPage = 1;
+  let currentExercisesPage = 1;
+  let currentExercisesTotalPages = 0;
+  const filtersPerPage = window.matchMedia('(max-width: 767px)').matches
+    ? 9
+    : 12;
+  const catalogRequests = createCatalogRequests(
+    () => undefined,
+    response => {
+      if (response.page !== currentExercisesPage) return;
+      errorElement.hidden = true;
+      currentExercisesTotalPages = response.totalPages;
+      listElement.textContent = '';
+      emptyElement.hidden = response.results.length !== 0;
+      listElement.hidden = response.results.length === 0;
+      response.results.forEach(exercise => {
+        listElement.append(
+          createExerciseCard(templateElement, exercise, false)
+        );
+      });
+      renderPagination(
+        exercisesPaginationElement,
+        currentExercisesPage,
+        currentExercisesTotalPages,
+        page => {
+          currentExercisesPage = page;
+          catalogRequests.changeExercisesPage(page);
+        }
+      );
+    },
+    () => {
+      listElement.textContent = '';
+      emptyElement.hidden = true;
+      exercisesPaginationElement.hidden = true;
+      showError("We couldn't load exercises. Please try again later.");
+    }
+  );
+
+  void loadHomeQuote(quoteTextElement, quoteAuthorElement, quoteErrorElement);
 
   try {
     setDefaultFilter();
-    const filters = await getAllFilters();
+    activeFilter = getFilterFromHash() ?? activeFilter;
+    allFilters = await getAllFilters();
     categoriesElement.textContent = '';
-    for (const filter of filters) {
+    for (const filter of allFilters) {
       categoriesElement.append(
         createCategoryCard(categoryTemplateElement, filter)
       );
     }
-    renderCategoryList();
+    renderCategoryList(activeFilter);
 
     categoriesElement.addEventListener('click', event => {
       const link = (event.target as HTMLElement).closest<HTMLAnchorElement>(
@@ -94,14 +155,6 @@ async function initHomePage(): Promise<void> {
           link.dataset.categoryName ?? ''
         );
       }
-    });
-    backElement.addEventListener('click', () => {
-      const path = window.location.hash.split('?')[0];
-      const segments = path.split('/').filter(Boolean);
-      if (segments.length > 2) {
-        segments.pop();
-      }
-      window.location.hash = `#/${segments.join('/') || 'category/muscles'}`;
     });
     filterNavElement.addEventListener('click', event => {
       const button = (event.target as HTMLElement).closest<HTMLButtonElement>(
@@ -121,21 +174,41 @@ async function initHomePage(): Promise<void> {
         searchInputElement.value.trim()
       );
     });
-    window.addEventListener('hashchange', () => {
-      void renderCategory();
-    });
-    await renderCategory();
+    window.addEventListener('hashchange', safeRenderCategory);
+    safeRenderCategory();
   } catch {
-    error.hidden = false;
+    showError("We couldn't load categories. Please try again later.");
   }
 
-  async function renderCategory(): Promise<void> {
-    const match = window.location.hash.match(
-      /^#\/category\/([^/]+)(?:\/([^?]+))?/
-    );
+  function showError(message: string): void {
+    errorElement.textContent = message;
+    errorElement.hidden = false;
+  }
+
+  function safeRenderCategory(): void {
+    try {
+      renderCategory();
+    } catch {
+      catalogRequests.cancelExercises();
+      showError("We couldn't find this category. Please choose another one.");
+    }
+  }
+
+  function renderCategory(): void {
+    const hash = window.location.hash;
+    if (hash === '' || hash === '#' || hash === '#/') {
+      // Home link / breadcrumb: keep the currently selected filter
+      // instead of falling back to a list with every category type.
+      window.location.replace(`#/category/${toUrlSlug(activeFilter)}`);
+      return;
+    }
+    const match = hash.match(/^#\/category\/([^/?]+)(?:\/([^?]+))?/);
     if (!match) {
-      renderCategoryList();
+      // Another route (e.g. favorites): drop pending catalog responses.
+      catalogRequests.cancelExercises();
+      renderCategoryList(activeFilter);
       categoriesElement.hidden = false;
+      filtersPaginationElement.hidden = false;
       exercisesElement.hidden = true;
       breadcrumbsElement.hidden = true;
       catalogTitleElement.hidden = false;
@@ -144,9 +217,14 @@ async function initHomePage(): Promise<void> {
       return;
     }
     const categoryType = findFilterType(match[1]);
+    if (categoryType !== activeFilter) filtersPage = 1;
+    activeFilter = categoryType;
+    errorElement.hidden = true;
     if (!match[2]) {
+      catalogRequests.cancelExercises();
       renderCategoryList(categoryType);
       categoriesElement.hidden = false;
+      filtersPaginationElement.hidden = false;
       exercisesElement.hidden = true;
       breadcrumbsElement.hidden = true;
       catalogTitleElement.hidden = false;
@@ -158,6 +236,7 @@ async function initHomePage(): Promise<void> {
     backElement.href = `#/category/${toUrlSlug(categoryType)}`;
     categoryTitleElement.textContent = category;
     categoriesElement.hidden = true;
+    filtersPaginationElement.hidden = true;
     exercisesElement.hidden = false;
     breadcrumbsElement.hidden = false;
     catalogTitleElement.hidden = true;
@@ -174,19 +253,12 @@ async function initHomePage(): Promise<void> {
     listElement.textContent = '';
     const params = getCategoryParams();
     searchInputElement.value = params.query.get('keyword') ?? '';
-    const response = await getExercisesByFilter(
-      categoryType,
-      category,
-      1,
-      9,
-      searchInputElement.value
-    );
-    const { results } = response;
-    emptyElement.hidden = results.length !== 0;
-    listElement.hidden = results.length === 0;
-    for (const exercise of results) {
-      listElement.append(createExerciseCard(templateElement, exercise, false));
-    }
+    catalogRequests.state.filter = categoryType;
+    catalogRequests.state.category = category;
+    catalogRequests.state.keyword = searchInputElement.value;
+    currentExercisesPage = 1;
+    currentExercisesTotalPages = 0;
+    catalogRequests.changeExercisesPage(1);
   }
 
   function renderCategoryList(selectedCategoryType?: Filter['filter']): void {
@@ -203,20 +275,161 @@ async function initHomePage(): Promise<void> {
     categoriesElement
       .querySelectorAll<HTMLElement>('[data-category-name]')
       .forEach(categoryElement => {
-        categoryElement.hidden = Boolean(
-          selectedCategoryType &&
-          toUrlSlug(categoryElement.dataset.categoryType ?? '') !==
-            toUrlSlug(selectedCategoryType)
-        );
+        const matchesFilter =
+          !selectedCategoryType ||
+          toUrlSlug(categoryElement.dataset.categoryType ?? '') ===
+            toUrlSlug(selectedCategoryType);
+        const index = Array.from(
+          categoriesElement.querySelectorAll<HTMLElement>(
+            `[data-category-name][data-category-type="${selectedCategoryType}"]`
+          )
+        ).indexOf(categoryElement);
+        categoryElement.hidden =
+          !matchesFilter ||
+          (index >= 0 && index < (filtersPage - 1) * filtersPerPage) ||
+          (index >= 0 && index >= filtersPage * filtersPerPage);
       });
+    renderFiltersPagination();
+  }
+
+  function renderFiltersPagination(): void {
+    const totalPages = Math.ceil(
+      allFilters.filter(filter => filter.filter === activeFilter).length /
+        filtersPerPage
+    );
+    renderPagination(
+      filtersPaginationElement,
+      filtersPage,
+      totalPages,
+      page => {
+        filtersPage = page;
+        renderCategoryList(activeFilter);
+      }
+    );
   }
 
   function setDefaultFilter(): void {
     const hash = window.location.hash;
     if (hash && hash !== '#/' && hash !== '#') return;
 
-    window.location.hash = '#/category/muscles';
+    window.history.replaceState(null, '', '#/category/muscles');
   }
+
+  function getFilterFromHash(): Filter['filter'] | null {
+    const match = window.location.hash.match(/^#\/category\/([^/?]+)/);
+    if (!match) return null;
+    try {
+      return findFilterType(match[1]);
+    } catch {
+      return null;
+    }
+  }
+}
+
+function renderPagination(
+  container: HTMLElement,
+  page: number,
+  totalPages: number,
+  onChange: (page: number) => void
+): void {
+  const pageTemplate = document.querySelector<HTMLTemplateElement>(
+    '[data-pagination-page-template]'
+  );
+  const arrowTemplate = document.querySelector<HTMLTemplateElement>(
+    '[data-pagination-arrow-template]'
+  );
+  const ellipsisTemplate = document.querySelector<HTMLTemplateElement>(
+    '[data-pagination-ellipsis-template]'
+  );
+  if (!pageTemplate || !arrowTemplate || !ellipsisTemplate) {
+    throw new Error('Pagination templates are missing.');
+  }
+  container.textContent = '';
+  container.hidden = totalPages <= 1;
+  if (totalPages <= 1) return;
+
+  const appendPage = (value: number): void => {
+    const button = pageTemplate.content.firstElementChild?.cloneNode(
+      true
+    ) as HTMLButtonElement | null;
+    if (!button) throw new Error('Pagination page template is empty.');
+    button.type = 'button';
+    button.textContent = String(value);
+    button.classList.toggle('is-active', value === page);
+    button.setAttribute('aria-label', `Page ${value}`);
+    if (value === page) button.setAttribute('aria-current', 'page');
+    button.addEventListener('click', () => onChange(value));
+    container.append(button);
+  };
+
+  const appendArrow = (
+    label: string,
+    source: string,
+    position: 'first' | 'previous' | 'next' | 'last',
+    disabled: boolean,
+    nextPage: number
+  ): void => {
+    const button = arrowTemplate.content.firstElementChild?.cloneNode(
+      true
+    ) as HTMLButtonElement | null;
+    if (!button) throw new Error('Pagination arrow template is empty.');
+    button.type = 'button';
+    button.dataset.paginationArrow = label;
+    button.disabled = disabled;
+    button.setAttribute('aria-label', label);
+    const icon = button.querySelector<HTMLElement>(
+      '.home-page__pagination-arrow-icon'
+    );
+    const image = icon?.querySelector<HTMLImageElement>('img');
+    if (!icon || !image) throw new Error('Pagination arrow image is missing.');
+    icon.classList.add(`is-${position}`);
+    image.src = source;
+    image.alt = '';
+    button.addEventListener('click', () => onChange(nextPage));
+    container.append(button);
+  };
+
+  appendArrow('First page', icons.paginationPrevious, 'first', page === 1, 1);
+  appendArrow(
+    'Previous page',
+    icons.paginationPrevious,
+    'previous',
+    page === 1,
+    page - 1
+  );
+  const visiblePages =
+    totalPages <= 5
+      ? Array.from({ length: totalPages }, (_, index) => index + 1)
+      : page <= 3
+        ? [1, 2, 3, totalPages]
+        : page >= totalPages - 2
+          ? [1, totalPages - 2, totalPages - 1, totalPages]
+          : [1, page, totalPages];
+
+  visiblePages.forEach((value, index) => {
+    if (index > 0 && value - visiblePages[index - 1] > 1) {
+      const ellipsis = ellipsisTemplate.content.firstElementChild?.cloneNode(
+        true
+      ) as HTMLElement | null;
+      if (!ellipsis) throw new Error('Pagination ellipsis template is empty.');
+      container.append(ellipsis);
+    }
+    appendPage(value);
+  });
+  appendArrow(
+    'Next page',
+    icons.paginationNext,
+    'next',
+    page === totalPages,
+    page + 1
+  );
+  appendArrow(
+    'Last page',
+    icons.paginationNext,
+    'last',
+    page === totalPages,
+    totalPages
+  );
 }
 
 function buildCategoryHash(
@@ -289,22 +502,18 @@ function findCategoryName(filterType: Filter['filter'], slug: string): string {
   throw new Error('Unknown exercise category.');
 }
 
-function createCategoryCard(
-  template: HTMLTemplateElement,
-  filter: Filter
-): HTMLElement {
-  const card = template.content.firstElementChild?.cloneNode(
-    true
-  ) as HTMLElement | null;
-  if (!card) throw new Error('Category card template is missing.');
-  const link = card as HTMLAnchorElement;
-  const name = card.querySelector<HTMLElement>('.home-page__category-name');
-  if (!name) throw new Error('Category template is incomplete.');
-  link.dataset.categoryName = filter.name;
-  link.dataset.categoryType = filter.filter;
-  link.href = buildCategoryHash(filter.filter, filter.name);
-  name.textContent = filter.name;
-  return card;
+async function loadHomeQuote(
+  text: HTMLElement,
+  author: HTMLElement,
+  error: HTMLElement
+): Promise<void> {
+  try {
+    const quote = await getQuote();
+    text.textContent = quote.quote;
+    author.textContent = quote.author;
+  } catch {
+    error.hidden = false;
+  }
 }
 
 void initHomePage();

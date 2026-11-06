@@ -1,6 +1,6 @@
 .exercise-card {
   display: flex;
-  min-height: 147px;
+  min-height: 141px;
   flex-direction: column;
   padding: var(--space-4);
   border-radius: var(--radius-card);
