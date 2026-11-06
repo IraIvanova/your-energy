@@ -1,4 +1,4 @@
-<div class="daily-quote">
+<div class="daily-quote" data-daily-quote>
   <div class="daily-quote__header">
     <span class="daily-quote__icon">
       <load
@@ -17,15 +17,10 @@
     />
   </span>
   <div class="daily-quote__content">
-    <blockquote
-      class="daily-quote__text"
-      data-quote-text
-      data-home-quote-text
-    ></blockquote>
-    <cite
-      class="daily-quote__author"
-      data-quote-author
-      data-home-quote-author
-    ></cite>
+    <blockquote class="daily-quote__text" data-quote-text></blockquote>
+    <cite class="daily-quote__author" data-quote-author></cite>
+    <p class="daily-quote__error" data-quote-error role="status" hidden>
+      Unable to load the quote. Please try again later.
+    </p>
   </div>
 </div>

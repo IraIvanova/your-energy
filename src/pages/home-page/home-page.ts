@@ -1,4 +1,4 @@
-import { getAllFilters, getQuote } from '../../services/api';
+import { getAllFilters } from '../../services/api';
 import { createCatalogRequests } from '../../services/pagination';
 import type { Filter } from '../../services/types';
 import { icons } from '../../images';
@@ -41,11 +41,6 @@ async function initHomePage(): Promise<void> {
   const exercisesPagination = root.querySelector<HTMLElement>(
     '[data-home-exercises-pagination]'
   );
-  const quoteText = root.querySelector<HTMLElement>('[data-home-quote-text]');
-  const quoteAuthor = root.querySelector<HTMLElement>(
-    '[data-home-quote-author]'
-  );
-  const quoteError = root.querySelector<HTMLElement>('[data-home-quote-error]');
   if (
     !categories ||
     !exercises ||
@@ -62,9 +57,6 @@ async function initHomePage(): Promise<void> {
     !categoryTemplate ||
     !template ||
     !error ||
-    !quoteText ||
-    !quoteAuthor ||
-    !quoteError ||
     !filtersPagination ||
     !exercisesPagination
   ) {
@@ -85,9 +77,6 @@ async function initHomePage(): Promise<void> {
   const emptyElement = empty;
   const filterNavElement = filterNav;
   const errorElement = error;
-  const quoteTextElement = quoteText;
-  const quoteAuthorElement = quoteAuthor;
-  const quoteErrorElement = quoteError;
   const filtersPaginationElement = filtersPagination;
   const exercisesPaginationElement = exercisesPagination;
   let activeFilter: Filter['filter'] = 'Muscles';
@@ -129,8 +118,6 @@ async function initHomePage(): Promise<void> {
       showError("We couldn't load exercises. Please try again later.");
     }
   );
-
-  void loadHomeQuote(quoteTextElement, quoteAuthorElement, quoteErrorElement);
 
   try {
     setDefaultFilter();
@@ -500,20 +487,6 @@ function findCategoryName(filterType: Filter['filter'], slug: string): string {
     }
   }
   throw new Error('Unknown exercise category.');
-}
-
-async function loadHomeQuote(
-  text: HTMLElement,
-  author: HTMLElement,
-  error: HTMLElement
-): Promise<void> {
-  try {
-    const quote = await getQuote();
-    text.textContent = quote.quote;
-    author.textContent = quote.author;
-  } catch {
-    error.hidden = false;
-  }
 }
 
 void initHomePage();

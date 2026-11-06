@@ -1,12 +1,10 @@
-import { getExercisesByIds, getQuote, type Quote } from '../../services/api';
+import { getExercisesByIds } from '../../services/api';
 import { createExerciseCard } from '../../components/exercise-card/exercise-card';
 import { readFavoriteIds, removeFavoriteId } from '../../services/favorites';
 
-const QUOTE_CACHE_KEY = 'your-energy-daily-quote';
-
 function initFavoritesPage(): void {
-  // Daily quote markup is shared with the home page, so every query is
-  // scoped to the favorites page to avoid writing into the home copy.
+  // Exercise card markup is shared with the home page, so every query is
+  // scoped to the favorites page.
   const root = document.querySelector<HTMLElement>('[data-page="/favorites"]');
   if (!root) {
     throw new Error('Favorites page is missing.');
@@ -18,18 +16,7 @@ function initFavoritesPage(): void {
   const template = root.querySelector<HTMLTemplateElement>(
     '[data-exercise-template]'
   );
-  const quoteText = root.querySelector<HTMLElement>('[data-quote-text]');
-  const quoteAuthor = root.querySelector<HTMLElement>('[data-quote-author]');
-  const quoteError = root.querySelector<HTMLElement>('[data-quote-error]');
-  if (
-    !list ||
-    !empty ||
-    !error ||
-    !template ||
-    !quoteText ||
-    !quoteAuthor ||
-    !quoteError
-  ) {
+  if (!list || !empty || !error || !template) {
     throw new Error('Favorites page is missing its list or empty state.');
   }
 
@@ -108,81 +95,7 @@ function initFavoritesPage(): void {
     void refreshFavoritesList();
   });
 
-  // Quote and favorites load independently: a broken quote cache or a
-  // failed quote request must not block the favorites list.
-  void loadDailyQuote(quoteText, quoteAuthor, quoteError);
   void refreshFavoritesList();
-}
-
-function getToday(): string {
-  const now = new Date();
-  return [
-    now.getFullYear(),
-    String(now.getMonth() + 1).padStart(2, '0'),
-    String(now.getDate()).padStart(2, '0'),
-  ].join('-');
-}
-
-function readCachedQuote(today: string): Quote | null {
-  try {
-    const cached = window.localStorage.getItem(QUOTE_CACHE_KEY);
-    if (!cached) return null;
-    const parsed: unknown = JSON.parse(cached);
-    if (
-      typeof parsed === 'object' &&
-      parsed !== null &&
-      'date' in parsed &&
-      'quote' in parsed &&
-      'author' in parsed &&
-      parsed.date === today &&
-      typeof parsed.quote === 'string' &&
-      typeof parsed.author === 'string'
-    ) {
-      return { quote: parsed.quote, author: parsed.author };
-    }
-  } catch {
-    try {
-      window.localStorage.removeItem(QUOTE_CACHE_KEY);
-    } catch {
-      // Storage is unavailable; just fetch a fresh quote.
-    }
-  }
-  return null;
-}
-
-async function loadDailyQuote(
-  text: HTMLElement,
-  author: HTMLElement,
-  error: HTMLElement
-): Promise<void> {
-  const today = getToday();
-  const cached = readCachedQuote(today);
-  if (cached) {
-    text.textContent = cached.quote;
-    author.textContent = cached.author;
-    return;
-  }
-
-  try {
-    const quote = await getQuote();
-    text.textContent = quote.quote;
-    author.textContent = quote.author;
-    error.hidden = true;
-    try {
-      window.localStorage.setItem(
-        QUOTE_CACHE_KEY,
-        JSON.stringify({
-          date: today,
-          quote: quote.quote,
-          author: quote.author,
-        })
-      );
-    } catch {
-      // Caching is optional.
-    }
-  } catch {
-    error.hidden = false;
-  }
 }
 
 initFavoritesPage();

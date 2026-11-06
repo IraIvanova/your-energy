@@ -68,3 +68,10 @@
   font-size: var(--font-size-sm);
   font-style: normal;
 }
+
+.daily-quote__error {
+  margin: 0;
+  color: var(--color-inverse-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+}
