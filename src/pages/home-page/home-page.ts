@@ -141,7 +141,8 @@ function initHomePage(): void {
     catalog.cancelExercises();
     const filterChanged =
       route.filter !== catalog.state.filter ||
-      catalog.state.filters.totalPages === 0;
+      catalog.state.filters.totalPages === 0 ||
+      catalog.state.filtersError;
 
     setActiveCategoryFilter(route.filter);
     catalogTitle.hidden = false;
@@ -196,12 +197,8 @@ function initHomePage(): void {
   function render(): void {
     const hash = window.location.hash;
     if (hash === '' || hash === '#' || hash === '#/') {
-      // Home: show the current filter (Muscles by default).
-      window.history.replaceState(
-        null,
-        '',
-        buildFilterHash(catalog.state.filter)
-      );
+      // Home always starts with the default filter.
+      window.history.replaceState(null, '', buildFilterHash(DEFAULT_FILTER));
       render();
       return;
     }
