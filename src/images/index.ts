@@ -16,6 +16,7 @@ import lats from './photos/lats.jpg';
 import levatorScapulae from './photos/levator-scapulae.jpg';
 import logo from './icons/logo.svg';
 import logoLight from './icons/logo-light.svg';
+import menu from './icons/menu.svg';
 import sun from './icons/sun.svg';
 import sunMobile from './icons/sun-mobile.svg';
 import quote from './icons/quote.svg';
@@ -72,6 +73,7 @@ export const images = {
 export const icons = {
   logo,
   logoLight,
+  menu,
   sun,
   sunMobile,
   quote,
