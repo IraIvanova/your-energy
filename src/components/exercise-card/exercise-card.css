@@ -1,5 +1,6 @@
 .exercise-card {
   display: flex;
+  min-width: 0;
   min-height: 141px;
   flex-direction: column;
   padding: var(--space-4);
@@ -144,6 +145,13 @@
 
 .exercise-card__details span {
   color: var(--color-subtle);
+}
+
+@media (max-width: 767px) {
+  .exercise-card__details {
+    flex-wrap: wrap;
+    row-gap: var(--space-1);
+  }
 }
 
 @media (min-width: 768px) {

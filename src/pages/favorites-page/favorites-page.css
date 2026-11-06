@@ -84,12 +84,6 @@
   text-align: left;
 }
 
-.exercise-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--grid-gap) var(--space-4);
-}
-
 @media (min-width: 768px) {
   .favorites-page__title {
     margin-bottom: var(--space-10);
@@ -100,13 +94,9 @@
   .favorites-page__sidebar-bottom {
     grid-template-columns: 1fr 1fr;
   }
-
-  .exercise-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1440px) {
   .favorites-page .daily-quote {
     min-height: 230px;
   }
@@ -194,4 +184,9 @@
   .favorites-page .exercise-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+/* The design has no footer on Favorites (all breakpoints). */
+body.favorites-active .footer {
+  display: none;
 }

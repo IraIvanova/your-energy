@@ -106,7 +106,7 @@
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1440px) {
   .hero {
     grid-template-areas:
       'content detail'

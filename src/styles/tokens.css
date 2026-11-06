@@ -43,7 +43,9 @@
   --radius-pill: 30px;
   --radius-hero: 30px;
   --border-width: 1px;
-  --container-max: 1440px;
+  /* Container follows the design frames: fluid below 375px,
+     then fixed 375px / 768px / 1440px (padding included). */
+  --container-max: 375px;
   --page-gutter: 20px;
   --section-gap: 80px;
   --grid-gap: 20px;
@@ -67,6 +69,7 @@
 
 @media (min-width: 768px) {
   :root {
+    --container-max: 768px;
     --page-gutter: 32px;
     --grid-gap: 32px;
     --surface-padding: 40px;
@@ -84,8 +87,9 @@
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1440px) {
   :root {
+    --container-max: 1440px;
     --section-gap: 150px;
     --section-font-size: 44px;
     --section-line-height: 48px;

@@ -1,7 +1,7 @@
 .category-card {
   position: relative;
   display: flex;
-  height: 335px;
+  height: 225px;
   min-height: 0;
   align-items: flex-end;
   overflow: hidden;
@@ -58,15 +58,9 @@
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1440px) {
   .category-card {
     height: 242px;
     min-height: 0;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1199px) {
-  .category-card {
-    height: 225px;
   }
 }
