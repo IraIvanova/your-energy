@@ -47,24 +47,31 @@
       media="(min-width: 1200px)"
       type="image/webp"
       srcset="
-        ./images/photos/hero-desktop.webp    1x,
-        ./images/photos/hero-desktop-2x.webp 2x
+        ./images/photos/hero-desktop.webp    1376w,
+        ./images/photos/hero-desktop-2x.webp 2752w
       "
+      sizes="(min-width: 1440px) 1376px, calc(100vw - 64px)"
     />
     <source
       media="(min-width: 640px)"
       type="image/webp"
       srcset="
-        ./images/photos/hero-tablet.webp    1x,
-        ./images/photos/hero-tablet-2x.webp 2x
+        ./images/photos/hero-tablet.webp       704w,
+        ./images/photos/hero-tablet-1135.webp 1135w,
+        ./images/photos/hero-tablet-2x.webp   1408w,
+        ./images/photos/hero-tablet-2270.webp 2270w
       "
+      sizes="calc(100vw - 64px)"
     />
     <source
       type="image/webp"
       srcset="
-        ./images/photos/hero-mobile.webp    1x,
-        ./images/photos/hero-mobile-2x.webp 2x
+        ./images/photos/hero-mobile.webp       335w,
+        ./images/photos/hero-mobile-2x.webp    670w,
+        ./images/photos/hero-mobile-1005.webp 1005w,
+        ./images/photos/hero-mobile-1454.webp 1454w
       "
+      sizes="calc(100vw - 40px)"
     />
     <img
       class="hero__image"
