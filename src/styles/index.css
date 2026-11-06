@@ -1,12 +1,29 @@
 @import './tokens.css';
+@import './scrollbar.css';
 @import './design-system.css';
 @import '../components/app-shell/app-shell.css';
 @import '../components/button/button.css';
+@import '../components/category-card/category-card.css';
+@import '../components/daily-quote/daily-quote.css';
 @import '../components/icon/icon.css';
+@import '../components/breadcrumbs/breadcrumbs.css';
 @import '../components/social-links/social-links.css';
 @import '../components/search-field/search-field.css';
+@import '../components/hero/hero.css';
+@import '../components/daily-norm/daily-norm.css';
+@import '../components/exercise-card/exercise-card.css';
+@import '../components/exercise-modal/exercise-modal.css';
 @import '../pages/home-page/home-page.css';
 @import '../pages/favorites-page/favorites-page.css';
+@import '../components/footer/footer.css';
+@import '../components/category-filters/category-filters.css';
+@import '../components/category-list/category-list.css';
+@import '../components/exercise-search/exercise-search.css';
+@import '../components/exercise-list/exercise-list.css';
+@import '../components/pagination/pagination.css';
+@import '../components/loader/loader.css';
+@import '../components/scroll-up/scroll-up.css';
+
 :root {
   font-family: var(--font-family);
   font-size: var(--font-size-body);
@@ -33,6 +50,10 @@ body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
+}
+
+body.favorites-active .page-content {
+  padding-block: 0;
 }
 
 a {

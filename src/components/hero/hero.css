@@ -1,0 +1,139 @@
+.hero {
+  display: grid;
+  grid-template-areas:
+    'content'
+    'picture'
+    'tags';
+  row-gap: var(--space-5);
+}
+
+.hero__content {
+  grid-area: content;
+}
+
+.hero__title {
+  max-width: 639px;
+  margin: 0;
+  font-size: var(--hero-font-size);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-heading);
+  line-height: var(--hero-line-height);
+}
+
+.hero__sun {
+  display: inline-block;
+  width: 38px;
+  height: 38px;
+  vertical-align: -8px;
+}
+
+.hero__accent {
+  font-style: italic;
+}
+
+.hero__text {
+  max-width: 528px;
+  margin: var(--space-5) 0 0;
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-heading);
+  line-height: var(--line-height-xs);
+}
+
+.hero__detail {
+  display: none;
+}
+
+.hero__tags {
+  display: flex;
+  flex-wrap: wrap;
+  grid-area: tags;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hero__tag {
+  padding: 3px 11px;
+  border: var(--border-width) solid currentColor;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-xs);
+}
+
+.hero__picture {
+  display: block;
+  grid-area: picture;
+}
+
+.hero__image {
+  display: block;
+  width: 100%;
+  height: var(--hero-height);
+  border-radius: var(--radius-hero);
+  object-fit: cover;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    row-gap: 0;
+  }
+
+  .hero__sun {
+    width: 59px;
+    height: 59px;
+    vertical-align: -3px;
+  }
+
+  .hero__text {
+    font-size: var(--font-size-lead);
+    line-height: var(--line-height-body);
+  }
+
+  .hero__picture {
+    margin-top: var(--space-8);
+  }
+
+  .hero__tags {
+    justify-content: flex-end;
+    margin-top: var(--space-4);
+  }
+
+  .hero__tag {
+    padding-inline: 15px;
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+}
+
+@media (min-width: 1440px) {
+  .hero {
+    grid-template-areas:
+      'content detail'
+      'content tags'
+      'picture picture';
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-8);
+  }
+
+  .hero__detail {
+    display: block;
+    grid-area: detail;
+    justify-self: end;
+    margin-top: var(--space-3);
+  }
+
+  .hero__detail-image {
+    display: block;
+    width: 168px;
+    height: 100px;
+    border-radius: var(--radius-surface);
+    object-fit: cover;
+  }
+
+  .hero__tags {
+    align-self: end;
+    width: 197px;
+    margin-top: 0;
+  }
+}

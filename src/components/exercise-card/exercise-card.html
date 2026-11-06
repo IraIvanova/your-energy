@@ -1,0 +1,51 @@
+<article class="exercise-card" data-exercise-card data-exercise-id="{=$id}">
+  <div class="exercise-card__actions">
+    <div class="exercise-card__action-group">
+      <span class="exercise-card__badge">WORKOUT</span>
+      <button
+        class="exercise-card__remove"
+        type="button"
+        aria-label="Remove {=$title} from favorites"
+        data-favorite-remove
+        hidden
+      >
+        <load
+          src="components/icon/icon.html"
+          src-url="./images/icons/trash.svg"
+          label=""
+        />
+      </button>
+      <span class="exercise-card__rating" data-exercise-rating>
+        <span data-rating-value>{=$rating}</span>
+        <load
+          src="components/icon/icon.html"
+          src-url="./images/icons/star.svg"
+          label=""
+        />
+      </span>
+    </div>
+    <button class="exercise-card__start" type="button" data-exercise-start>
+      Start
+      <load
+        src="components/icon/icon.html"
+        src-url="./images/icons/arrow-right.svg"
+        label=""
+      />
+    </button>
+  </div>
+  <div class="exercise-card__heading">
+    <span class="exercise-card__exercise-icon">
+      <load
+        src="components/icon/icon.html"
+        src-url="./images/icons/runner.svg"
+        label=""
+      />
+    </span>
+    <h2 class="exercise-card__title">{=$title}</h2>
+  </div>
+  <div class="exercise-card__details">
+    <p><span>Burned calories:</span> {=$burned-calories}</p>
+    <p><span>Body part:</span> {=$body-part}</p>
+    <p><span>Target:</span> {=$target}</p>
+  </div>
+</article>

@@ -1,29 +1,192 @@
 .favorites-page {
-  max-width: 680px;
+  width: 100%;
+  padding-block: var(--space-16);
 }
 
-.favorites-page .page-intro__eyebrow {
-  margin: 0 0 var(--space-4);
-  color: var(--color-muted);
-  font-size: var(--font-size-sm);
-}
-
-.favorites-page .page-intro__title {
-  margin: 0;
-  font-size: var(--hero-font-size);
+.favorites-page__title {
+  margin: 0 0 var(--space-8);
+  font-size: var(--section-font-size);
   font-weight: var(--font-weight-regular);
   letter-spacing: var(--letter-spacing-heading);
-  line-height: var(--hero-line-height);
+  line-height: var(--section-line-height);
 }
 
-.favorites-page .page-intro__description {
-  max-width: 528px;
-  margin: var(--space-5) 0 0;
+.favorites-page__layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.favorites-page__sidebar {
+  flex: none;
+}
+
+.favorites-page__sidebar-bottom {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.favorites-page__norm {
+  display: flex;
+  min-height: 119px;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-5);
+  border-radius: var(--radius-surface);
+  background: var(--color-surface);
+}
+
+.favorites-page__norm img {
+  align-self: center;
+  width: 20px;
+  height: 20px;
+  margin-bottom: var(--space-2);
+}
+
+.favorites-page__norm strong {
+  font-size: var(--font-size-lead);
+  font-weight: var(--font-weight-regular);
+}
+
+.favorites-page__norm span {
+  color: var(--color-subtle);
+  font-size: var(--font-size-xs);
+}
+
+.favorites-page__photo {
+  min-height: 119px;
+  border-radius: var(--radius-surface);
+  background:
+    linear-gradient(180deg, transparent, rgb(17 17 17 / 40%)),
+    url('../../images/photos/favorites.jpg') center top / cover no-repeat;
+}
+
+.favorites-page__content {
+  min-width: 0;
+}
+
+.favorites-scroll {
+  min-width: 0;
+}
+
+.favorites-page__empty,
+.favorites-page__error {
+  max-width: 440px;
+  margin: var(--space-12) auto;
   color: var(--color-muted);
+  text-align: center;
+}
+
+.favorites-page__error {
+  margin: var(--space-4) 0;
+  text-align: left;
 }
 
 @media (min-width: 768px) {
-  .favorites-page .page-intro__description {
-    font-size: var(--font-size-lead);
+  .favorites-page__title {
+    margin-bottom: var(--space-10);
+    font-size: var(--section-font-size);
+    line-height: var(--section-line-height);
   }
+
+  .favorites-page__sidebar-bottom {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1440px) {
+  .favorites-page .daily-quote {
+    min-height: 230px;
+  }
+
+  body.favorites-active {
+    overflow: hidden;
+  }
+
+  body.favorites-active .page-content {
+    height: calc(100vh - 100px);
+    overflow: hidden;
+  }
+
+  .favorites-page {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .favorites-page__layout {
+    min-height: 0;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--space-8);
+    flex: 1;
+  }
+
+  .favorites-page__sidebar {
+    width: 494px;
+  }
+
+  .favorites-page__content {
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+    padding-right: var(--scrollbar-gap);
+    overflow-y: auto;
+    scrollbar-color: var(--color-ink) var(--color-border);
+    scrollbar-width: thin;
+  }
+
+  .favorites-page__content::-webkit-scrollbar {
+    display: block;
+    width: var(--scrollbar-size);
+  }
+
+  .favorites-page__content::-webkit-scrollbar-track {
+    border-radius: var(--scrollbar-radius);
+    background: var(--color-border);
+  }
+
+  .favorites-page__content::-webkit-scrollbar-thumb {
+    border-radius: var(--scrollbar-radius);
+    background: var(--color-ink);
+  }
+
+  /* Chromium 121+ applies scrollbar-color and ignores ::-webkit-scrollbar
+     styles, which renders a default-width bar. Keep the custom 8px one. */
+  @supports selector(::-webkit-scrollbar) {
+    .favorites-page__content {
+      scrollbar-color: auto;
+      scrollbar-width: auto;
+    }
+  }
+
+  .favorites-scroll {
+    display: block;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    flex: 1;
+  }
+
+  .favorites-page__sidebar-bottom {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .favorites-page__norm,
+  .favorites-page__photo {
+    min-height: 141px;
+  }
+
+  .favorites-page .exercise-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* The design has no footer on Favorites (all breakpoints). */
+body.favorites-active .footer {
+  display: none;
 }
